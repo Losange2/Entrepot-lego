@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("page de co")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1561546deb47cc49477632479d03a9f436fb1fb2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b8442b1fcde618d82f41e4f8d368419b687c1ae8")]
 [assembly: System.Reflection.AssemblyProductAttribute("page de co")]
 [assembly: System.Reflection.AssemblyTitleAttribute("page de co")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
