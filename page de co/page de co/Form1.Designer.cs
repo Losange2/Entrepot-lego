@@ -32,6 +32,10 @@
             pblogo = new PictureBox();
             ltitre = new Label();
             tbutil = new TextBox();
+            tbmdp = new TextBox();
+            lutil = new Label();
+            lmdp = new Label();
+            btnconnect = new Button();
             ((System.ComponentModel.ISupportInitialize)pblogo).BeginInit();
             SuspendLayout();
             // 
@@ -60,17 +64,61 @@
             // tbutil
             // 
             tbutil.Font = new Font("Segoe UI", 15F);
-            tbutil.Location = new Point(1090, 118);
+            tbutil.Location = new Point(1090, 358);
             tbutil.Name = "tbutil";
             tbutil.Size = new Size(440, 34);
             tbutil.TabIndex = 2;
-            tbutil.Text = "Nom d'utilisateur";
+            tbutil.TextChanged += tbutil_TextChanged;
+            // 
+            // tbmdp
+            // 
+            tbmdp.Font = new Font("Segoe UI", 15F);
+            tbmdp.Location = new Point(1090, 642);
+            tbmdp.Name = "tbmdp";
+            tbmdp.PasswordChar = '*';
+            tbmdp.Size = new Size(457, 34);
+            tbmdp.TabIndex = 3;
+            // 
+            // lutil
+            // 
+            lutil.AutoSize = true;
+            lutil.Font = new Font("Segoe UI", 20F);
+            lutil.Location = new Point(1190, 274);
+            lutil.Name = "lutil";
+            lutil.Size = new Size(235, 37);
+            lutil.TabIndex = 4;
+            lutil.Text = "Nom d'utilisateur :";
+            // 
+            // lmdp
+            // 
+            lmdp.AutoSize = true;
+            lmdp.Font = new Font("Segoe UI", 20F);
+            lmdp.Location = new Point(1215, 567);
+            lmdp.Name = "lmdp";
+            lmdp.Size = new Size(189, 37);
+            lmdp.TabIndex = 5;
+            lmdp.Text = "Mot de passe :";
+            // 
+            // btnconnect
+            // 
+            btnconnect.Font = new Font("Segoe UI", 20F);
+            btnconnect.Location = new Point(1215, 896);
+            btnconnect.Name = "btnconnect";
+            btnconnect.Size = new Size(189, 84);
+            btnconnect.TabIndex = 6;
+            btnconnect.Text = "Se connecter";
+            btnconnect.UseVisualStyleBackColor = true;
+            btnconnect.Click += btnconnect_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1580, 1025);
+            Controls.Add(btnconnect);
+            Controls.Add(lmdp);
+            Controls.Add(lutil);
+            Controls.Add(tbmdp);
             Controls.Add(tbutil);
             Controls.Add(ltitre);
             Controls.Add(pblogo);
@@ -88,5 +136,9 @@
         private PictureBox pblogo;
         private Label ltitre;
         private TextBox tbutil;
+        private TextBox tbmdp;
+        private Label lutil;
+        private Label lmdp;
+        private Button btnconnect;
     }
 }
