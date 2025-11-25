@@ -1,17 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\",
+  "WorkspaceRootPath": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\leculee\\source\\repos\\losange2\\entrepot-lego\\page de co\\page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\etienne\\desktop\\legofactory\\page de co\\page de co\\databaseconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\databaseconnection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\leculee\\source\\repos\\losange2\\entrepot-lego\\page de co\\page de co\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\etienne\\desktop\\legofactory\\page de co\\page de co\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\etienne\\desktop\\legofactory\\page de co\\page de co\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\leculee\\source\\repos\\losange2\\entrepot-lego\\page de co\\page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|c:\\users\\etienne\\desktop\\legofactory\\page de co\\page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{ED523D11-D1FF-45A6-9EE6-649057153584}|page de co\\page de co.csproj|solutionrelative:page de co\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
@@ -22,44 +34,87 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Program.cs",
+              "RelativeDocumentMoniker": "page de co\\Program.cs",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Program.cs",
+              "RelativeToolTip": "page de co\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T14:02:25.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Form2.cs [Conception]",
-              "DocumentMoniker": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form2.cs",
+              "Title": "Form2.cs",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form2.cs",
               "RelativeDocumentMoniker": "page de co\\Form2.cs",
-              "ToolTip": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form2.cs [Conception]*",
-              "RelativeToolTip": "page de co\\Form2.cs [Conception]*",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form2.cs",
+              "RelativeToolTip": "page de co\\Form2.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T14:01:52.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DatabaseConnection.cs",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\DatabaseConnection.cs",
+              "RelativeDocumentMoniker": "page de co\\DatabaseConnection.cs",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\DatabaseConnection.cs",
+              "RelativeToolTip": "page de co\\DatabaseConnection.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T13:24:06.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form2.cs [Conception]",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form2.cs",
+              "RelativeDocumentMoniker": "page de co\\Form2.cs",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form2.cs [Conception]",
+              "RelativeToolTip": "page de co\\Form2.cs [Conception]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T08:38:58.26Z",
               "EditorCaption": " [Conception]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form1.cs",
               "RelativeDocumentMoniker": "page de co\\Form1.cs",
-              "ToolTip": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form1.cs",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form1.cs",
               "RelativeToolTip": "page de co\\Form1.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAcwCMAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAcwCMAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T07:24:50.649Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "Form1.cs [Conception]",
-              "DocumentMoniker": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form1.cs",
               "RelativeDocumentMoniker": "page de co\\Form1.cs",
-              "ToolTip": "C:\\Users\\LECULEE\\source\\repos\\Losange2\\Entrepot-lego\\page de co\\page de co\\Form1.cs [Conception]",
+              "ToolTip": "C:\\Users\\ETIENNE\\Desktop\\LegoFactory\\page de co\\page de co\\Form1.cs [Conception]",
               "RelativeToolTip": "page de co\\Form1.cs [Conception]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T07:18:22.673Z",
