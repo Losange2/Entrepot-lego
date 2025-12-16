@@ -1,0 +1,44 @@
+# Build artifacts
+bin/
+obj/
+**/bin/
+**/obj/
+
+# VS/IDE
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# NuGet
+*.nupkg
+# Packages folder can be restored
+packages/
+
+# Resharper/JetBrains Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+# Rider/VS Code
+.vscode/
+
+# User-specific
+*.csproj.user
+
+# Env secrets
+page de co/.env
+
+# Publish outputs
+**/publish/
+
+# Others
+*.tmp

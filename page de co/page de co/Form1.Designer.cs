@@ -36,6 +36,7 @@
             lutil = new Label();
             lmdp = new Label();
             btnconnect = new Button();
+            cbShowPassword = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)pblogo).BeginInit();
             SuspendLayout();
             // 
@@ -68,6 +69,7 @@
             tbutil.Name = "tbutil";
             tbutil.Size = new Size(440, 34);
             tbutil.TabIndex = 2;
+            tbutil.PlaceholderText = "Nom d'utilisateur";
             tbutil.TextChanged += tbutil_TextChanged;
             // 
             // tbmdp
@@ -78,6 +80,7 @@
             tbmdp.PasswordChar = '*';
             tbmdp.Size = new Size(457, 34);
             tbmdp.TabIndex = 3;
+            tbmdp.PlaceholderText = "Mot de passe";
             // 
             // lutil
             // 
@@ -101,21 +104,39 @@
             // 
             // btnconnect
             // 
-            btnconnect.Font = new Font("Segoe UI", 20F);
-            btnconnect.Location = new Point(1215, 896);
+            btnconnect.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            btnconnect.Location = new Point(1190, 820);
             btnconnect.Name = "btnconnect";
-            btnconnect.Size = new Size(189, 84);
+            btnconnect.Size = new Size(250, 60);
             btnconnect.TabIndex = 6;
             btnconnect.Text = "Se connecter";
-            btnconnect.UseVisualStyleBackColor = true;
+            btnconnect.BackColor = Color.FromArgb(52, 152, 219);
+            btnconnect.ForeColor = Color.White;
+            btnconnect.FlatStyle = FlatStyle.Flat;
+            btnconnect.FlatAppearance.BorderSize = 0;
+            btnconnect.UseVisualStyleBackColor = false;
             btnconnect.Click += btnconnect_Click;
+            // 
+            // cbShowPassword
+            // 
+            cbShowPassword.AutoSize = true;
+            cbShowPassword.Font = new Font("Segoe UI", 10F);
+            cbShowPassword.Location = new Point(1090, 690);
+            cbShowPassword.Name = "cbShowPassword";
+            cbShowPassword.Size = new Size(171, 23);
+            cbShowPassword.TabIndex = 7;
+            cbShowPassword.Text = "Afficher le mot de passe";
+            cbShowPassword.UseVisualStyleBackColor = true;
+            cbShowPassword.CheckedChanged += cbShowPassword_CheckedChanged;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1580, 1025);
+            AcceptButton = btnconnect;
             Controls.Add(btnconnect);
+            Controls.Add(cbShowPassword);
             Controls.Add(lmdp);
             Controls.Add(lutil);
             Controls.Add(tbmdp);
@@ -124,7 +145,10 @@
             Controls.Add(pblogo);
             Font = new Font("Segoe UI", 9F);
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Connexion - LegoFactory";
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pblogo).EndInit();
             ResumeLayout(false);
@@ -140,5 +164,6 @@
         private Label lutil;
         private Label lmdp;
         private Button btnconnect;
+        private CheckBox cbShowPassword;
     }
 }
