@@ -1,6 +1,6 @@
 ﻿namespace page_de_co
 {
-    partial class Form2
+    partial class Form2Admin
     {
         /// <summary>
         /// Required designer variable.
