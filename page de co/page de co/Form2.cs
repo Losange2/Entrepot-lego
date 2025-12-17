@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace page_de_co
 {
-    public partial class Form2 : Form
+    public partial class Form2Admin : Form
     {
-        public Form2()
+        public Form2Admin()
         {
             InitializeComponent();
         }
@@ -29,35 +29,6 @@ namespace page_de_co
             }
             
             Text = $"LegoFactory - {currentUser.Login} ({currentUser.Role})";
-            
-            // Par défaut, tout est visible et activé
-            btnEntrepot.Visible = true;
-            btnHistorique.Visible = true;
-            btnStats.Visible = true;
-            btnEmplacements.Visible = true;
-            btnSets.Visible = true;
-            btnImportExport.Visible = true;
-            btnSync.Visible = true;
-            btnUsersRoles.Visible = true;
-            
-            // Contrôle d'accès par rôle
-            if (currentUser.Role == UserRole.Employe)
-            {
-                // Employé : consultation uniquement
-                // Cache les menus de gestion
-                btnEmplacements.Visible = false;
-                btnSets.Visible = false;
-                btnImportExport.Visible = false;
-                btnSync.Visible = false;
-                btnUsersRoles.Visible = false;
-            }
-            else if (currentUser.Role == UserRole.Responsable)
-            {
-                // Responsable : gestion opérationnelle mais pas les utilisateurs
-                btnUsersRoles.Visible = false; // Cache la gestion des utilisateurs
-            }
-            // Admin : tout est visible (aucun cache)
-            
             ShowView(new DashboardWelcome());
         }
 
