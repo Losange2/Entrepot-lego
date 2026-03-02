@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace LegoFactory
 {
-    public partial class Form2Employe : Form
+    public partial class DashboardEmploye : Form
     {
         private Panel panelSidebar;
         private Panel panelContent;
@@ -25,10 +25,10 @@ namespace LegoFactory
         private static readonly Color AccentColor = Color.FromArgb(100, 160, 255);
         private static readonly Color ContentBg = Color.FromArgb(245, 247, 251);
 
-        public Form2Employe()
+        public DashboardEmploye()
         {
             InitializeComponent();
-            this.Load += Form2Employe_Load;
+            this.Load += DashboardEmploye_Load;
             this.Resize += (s, e) => PositionLogout();
         }
 
@@ -120,7 +120,7 @@ namespace LegoFactory
             MinimumSize = new Size(800, 500);
             Controls.Add(panelContent);
             Controls.Add(panelSidebar);
-            Name = "Form2Employe";
+            Name = "DashboardEmploye";
             Text = "LegoFactory — Employé";
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = ContentBg;
@@ -163,7 +163,7 @@ namespace LegoFactory
             // Handled by Dock = Bottom
         }
 
-        private void Form2Employe_Load(object? sender, EventArgs e)
+        private void DashboardEmploye_Load(object? sender, EventArgs e)
         {
             var currentUser = CurrentUser.Instance;
             if (currentUser != null)
@@ -188,7 +188,7 @@ namespace LegoFactory
         private void btnLogout_Click(object? sender, EventArgs e)
         {
             CurrentUser.Instance = null;
-            new Form1().Show();
+            new LoginForm().Show();
             this.Close();
         }
     }

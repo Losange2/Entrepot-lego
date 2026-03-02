@@ -1,6 +1,6 @@
 namespace LegoFactory
 {
-    partial class Form2Admin
+    partial class DashboardAdmin
     {
         /// <summary>
         /// Required designer variable.
@@ -132,11 +132,11 @@ namespace LegoFactory
             MinimumSize = new Size(800, 500);
             Controls.Add(panelContent);
             Controls.Add(panelSidebar);
-            Name = "Form2Admin";
+            Name = "DashboardAdmin";
             Text = "LegoFactory - Admin";
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = ContentBg;
-            Load += Form2_Load;
+            Load += DashboardAdmin_Load;
             ResumeLayout(false);
         }
 

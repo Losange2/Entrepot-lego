@@ -1,6 +1,6 @@
 namespace LegoFactory
 {
-    partial class Form1
+    partial class LoginForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -207,13 +207,13 @@ namespace LegoFactory
             Controls.Add(panelRight);
             Controls.Add(panelLeft);
             Font = new Font("Segoe UI", 9F);
-            Name = "Form1";
+            Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Connexion � LegoFactory";
+            Text = "Connexion à LegoFactory";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             BackColor = Color.FromArgb(245, 247, 251);
-            Load += Form1_Load;
+            Load += LoginForm_Load;
             ((System.ComponentModel.ISupportInitialize)pblogo).EndInit();
             ResumeLayout(false);
             PerformLayout();

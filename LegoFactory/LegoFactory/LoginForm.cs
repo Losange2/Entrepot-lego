@@ -2,17 +2,17 @@ using MySql.Data.MySqlClient;
 
 namespace LegoFactory
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         private readonly DatabaseConnection _database;
 
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
             _database = new DatabaseConnection();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void LoginForm_Load(object sender, EventArgs e)
         {
             tbutil.Focus();
 
@@ -86,15 +86,15 @@ namespace LegoFactory
                     Form? dashboard = null;
                     if (CurrentUser.Instance.Role == UserRole.Employe)
                     {
-                        dashboard = new Form2Employe();
+                        dashboard = new DashboardEmploye();
                     }
                     else if (CurrentUser.Instance.Role == UserRole.Responsable)
                     {
-                        dashboard = new Form2Responsable();
+                        dashboard = new DashboardResponsable();
                     }
                     else if (CurrentUser.Instance.Role == UserRole.Admin)
                     {
-                        dashboard = new Form2Admin();
+                        dashboard = new DashboardAdmin();
                     }
 
                     if (dashboard != null)

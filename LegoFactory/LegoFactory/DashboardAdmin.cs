@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace LegoFactory
 {
-    public partial class Form2Admin : Form
+    public partial class DashboardAdmin : Form
     {
         private Button? _activeButton;
 
@@ -14,7 +14,7 @@ namespace LegoFactory
         private static readonly Color SidebarActive = Color.FromArgb(55, 100, 170);
         private static readonly Color ContentBg = Color.FromArgb(245, 247, 251);
 
-        public Form2Admin()
+        public DashboardAdmin()
         {
             InitializeComponent();
         }
@@ -50,7 +50,7 @@ namespace LegoFactory
             _activeButton.ForeColor = Color.White;
         }
 
-        private void Form2_Load(object sender, EventArgs e)
+        private void DashboardAdmin_Load(object sender, EventArgs e)
         {
             var currentUser = CurrentUser.Instance;
 
@@ -85,7 +85,7 @@ namespace LegoFactory
         private void btnLogout_Click(object? sender, EventArgs e)
         {
             CurrentUser.Instance = null;
-            new Form1().Show();
+            new LoginForm().Show();
             this.Close();
         }
     }
