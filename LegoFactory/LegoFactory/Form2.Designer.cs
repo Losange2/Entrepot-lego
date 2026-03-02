@@ -54,7 +54,7 @@ namespace LegoFactory
             panelHeader.Dock = DockStyle.Top;
             panelHeader.Height = 80;
 
-            lblLogo.Text = "[LF]  LegoFactory";
+            lblLogo.Text = "🏭  LegoFactory";
             lblLogo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             lblLogo.ForeColor = Color.White;
             lblLogo.AutoSize = false;
@@ -72,17 +72,17 @@ namespace LegoFactory
             lblUserInfo.BackColor = SidebarDark;
 
             // Boutons menu
-            StyleMenuButton(btnEntrepot, ">   Consulter l'entrepot");
-            StyleMenuButton(btnHistorique, ">   Historique des actions");
-            StyleMenuButton(btnEmplacements, ">   Gerer les emplacements");
-            StyleMenuButton(btnSets, ">   Gerer les sets");
-            StyleMenuButton(btnImportExport, ">   Importer / Exporter");
-            StyleMenuButton(btnSync, ">   Synchroniser stock");
-            StyleMenuButton(btnUsersRoles, ">   Utilisateurs et roles");
-            StyleMenuButton(btnStats, ">   Statistiques et reporting");
+            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
+            StyleMenuButton(btnHistorique, "📋   Historique des actions");
+            StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
+            StyleMenuButton(btnSets, "🧱   Gérer les sets");
+            StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
+            StyleMenuButton(btnSync, "🔄   Synchroniser stock");
+            StyleMenuButton(btnUsersRoles, "👥   Utilisateurs et rôles");
+            StyleMenuButton(btnStats, "📊   Statistiques & reporting");
 
             // Logout
-            btnLogout.Text = ">   Deconnexion";
+            btnLogout.Text = "🚪   Déconnexion";
             btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
             btnLogout.BackColor = Color.FromArgb(180, 50, 50);

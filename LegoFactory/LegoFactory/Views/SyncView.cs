@@ -18,7 +18,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = ">  Synchronisation",
+                Text = "🔄  Synchronisation",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -70,7 +70,7 @@ namespace LegoFactory
 
             var btnConfig = new Button
             {
-                Text = "  Configurer",
+                Text = "⚙️  Configurer",
                 Width = 180,
                 Height = 38,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
@@ -85,7 +85,7 @@ namespace LegoFactory
 
             var btnSync = new Button
             {
-                Text = "  Lancer la sync",
+                Text = "🔄  Lancer la sync",
                 Width = 180,
                 Height = 38,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),

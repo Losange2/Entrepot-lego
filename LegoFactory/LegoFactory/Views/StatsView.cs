@@ -25,7 +25,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = ">  Statistiques & reporting",
+                Text = "📊  Statistiques & reporting",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -44,9 +44,9 @@ namespace LegoFactory
                 Padding = new Padding(0, 8, 0, 8)
             };
 
-            lblTotalSets = CreateStatCard(">", "Total sets", "...");
-            lblTotalEmplacements = CreateStatCard(">", "Emplacements", "...");
-            lblEmplacementsVides = CreateStatCard(">", "Vides", "...");
+            lblTotalSets = CreateStatCard("📦", "Total sets", "...");
+            lblTotalEmplacements = CreateStatCard("📍", "Emplacements", "...");
+            lblEmplacementsVides = CreateStatCard("📭", "Vides", "...");
 
             // Grid
             var panelGrid = new Panel { Dock = DockStyle.Fill, Padding = new Padding(0, 8, 0, 0) };

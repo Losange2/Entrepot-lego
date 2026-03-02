@@ -62,7 +62,7 @@ namespace LegoFactory
             }
 
             Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role})";
-            lblUserInfo.Text = $"> {currentUser.Login} — {currentUser.Role}";
+            lblUserInfo.Text = $"👤 {currentUser.Login} — {currentUser.Role}";
             ShowView(new DashboardWelcome());
         }
 

@@ -23,7 +23,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = ">  Consulter l'entrepôt",
+                Text = "📦  Consulter l'entrepôt",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,

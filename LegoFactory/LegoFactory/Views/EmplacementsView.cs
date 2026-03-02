@@ -25,7 +25,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = ">  Gestion des emplacements",
+                Text = "📍  Gestion des emplacements",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -35,9 +35,9 @@ namespace LegoFactory
 
             // Toolbar
             var panelToolbar = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = BgColor, Padding = new Padding(0, 6, 0, 6) };
-            btnAdd = CreateButton("+  Ajouter", 0);
-            btnEdit = CreateButton("  Modifier", 130);
-            btnDelete = CreateButton("  Supprimer", 260);
+            btnAdd = CreateButton("➕  Ajouter", 0);
+            btnEdit = CreateButton("✏️  Modifier", 130);
+            btnDelete = CreateButton("🗑️  Supprimer", 260);
             btnDelete.BackColor = Color.FromArgb(180, 50, 50);
             panelToolbar.Controls.AddRange(new Control[] { btnAdd, btnEdit, btnDelete });
 

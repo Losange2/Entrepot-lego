@@ -24,7 +24,7 @@ namespace LegoFactory
 
             var iconLabel = new Label
             {
-                Text = "[LF]",
+                Text = "🏭",
                 Font = new Font("Segoe UI Emoji", 36F),
                 AutoSize = true,
                 Location = new Point(30, 30),

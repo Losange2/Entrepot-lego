@@ -15,7 +15,7 @@ namespace LegoFactory
 
         public EditRoleForm(string login, string currentRole)
         {
-            Text = $" Modifier rôle - {login}";
+            Text = $"✏️ Modifier rôle - {login}";
             StartPosition = FormStartPosition.CenterParent;
             Width = 400;
             Height = 200;
@@ -32,7 +32,7 @@ namespace LegoFactory
 
             btnOk = new Button
             {
-                Text = "  Enregistrer",
+                Text = "✔  Enregistrer",
                 Location = new Point(160, 80),
                 Width = 120,
                 Height = 36,

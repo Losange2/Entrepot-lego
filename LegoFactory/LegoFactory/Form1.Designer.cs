@@ -126,8 +126,8 @@ namespace LegoFactory
             lblLoginTitle.Location = new Point(30, 30);
 
             // --- Champ utilisateur ---
-            iconUser.Text = "Util.";
-            iconUser.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            iconUser.Text = "👤";
+            iconUser.Font = new Font("Segoe UI Emoji", 11F);
             iconUser.ForeColor = Color.FromArgb(30, 60, 114);
             iconUser.AutoSize = true;
             iconUser.Location = new Point(32, 112);
@@ -145,8 +145,8 @@ namespace LegoFactory
             panelUserLine.Location = new Point(30, 142);
 
             // --- Champ mot de passe ---
-            iconLock.Text = "MDP";
-            iconLock.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            iconLock.Text = "🔒";
+            iconLock.Font = new Font("Segoe UI Emoji", 11F);
             iconLock.ForeColor = Color.FromArgb(30, 60, 114);
             iconLock.AutoSize = true;
             iconLock.Location = new Point(32, 177);
