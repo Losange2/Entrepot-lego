@@ -14,7 +14,7 @@ namespace LegoFactory
 
         public EditCapaciteForm(string code, int capacite)
         {
-            Text = $"✏️ Modifier capacité - {code}";
+            Text = $" Modifier capacité - {code}";
             StartPosition = FormStartPosition.CenterParent;
             Width = 400;
             Height = 200;
@@ -29,7 +29,7 @@ namespace LegoFactory
 
             btnOk = new Button
             {
-                Text = "✔  Enregistrer",
+                Text = "  Enregistrer",
                 Location = new Point(160, 80),
                 Width = 120,
                 Height = 36,

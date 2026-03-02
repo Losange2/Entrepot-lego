@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using MySql.Data.MySqlClient;
@@ -22,7 +22,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = "📁  Import / Export",
+                Text = ">  Import / Export",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -41,12 +41,12 @@ namespace LegoFactory
             };
 
             // Card Import
-            var cardImport = CreateCard("📥  Importer des sets depuis CSV",
+            var cardImport = CreateCard(">  Importer des sets depuis CSV",
                 "Format CSV : Reference;nom;AgeCible;NombresPieces;quantiter",
                 "Importer CSV", BtnImport_Click);
 
             // Card Export
-            var cardExport = CreateCard("📤  Exporter les positions actuelles",
+            var cardExport = CreateCard(">  Exporter les positions actuelles",
                 "Export CSV : tous les sets avec emplacements et quantités",
                 "Exporter CSV", BtnExport_Click);
 

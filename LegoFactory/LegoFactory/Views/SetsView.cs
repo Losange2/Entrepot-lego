@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Drawing;
 using MySql.Data.MySqlClient;
 
@@ -25,7 +25,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = "🧱  Gestion des sets",
+                Text = ">  Gestion des sets",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -35,7 +35,7 @@ namespace LegoFactory
 
             // Toolbar recherche
             var panelToolbar = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = BgColor, Padding = new Padding(0, 6, 0, 6) };
-            var lblSearch = new Label { Text = "🔍", Font = new Font("Segoe UI Emoji", 11F), AutoSize = true, Location = new Point(0, 8) };
+            var lblSearch = new Label { Text = ">", Font = new Font("Segoe UI Emoji", 11F), AutoSize = true, Location = new Point(0, 8) };
             tbSearch = new TextBox { Location = new Point(30, 6), Width = 300, Height = 30, Font = new Font("Segoe UI", 10F), PlaceholderText = "Référence ou nom..." };
             btnSearch = CreateButton("Rechercher", 345, 3);
             panelToolbar.Controls.AddRange(new Control[] { lblSearch, tbSearch, btnSearch });

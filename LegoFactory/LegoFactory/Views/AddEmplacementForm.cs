@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -22,7 +22,7 @@ namespace LegoFactory
 
         public AddEmplacementForm()
         {
-            Text = "📍 Ajouter un emplacement";
+            Text = "> Ajouter un emplacement";
             StartPosition = FormStartPosition.CenterParent;
             Width = 440;
             Height = 320;
@@ -46,7 +46,7 @@ namespace LegoFactory
 
             btnOk = new Button
             {
-                Text = "✔  Ajouter",
+                Text = "  Ajouter",
                 Location = new Point(200, 200),
                 Width = 100,
                 Height = 36,

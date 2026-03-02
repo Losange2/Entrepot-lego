@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Drawing;
 
 namespace LegoFactory
@@ -24,7 +24,7 @@ namespace LegoFactory
 
             var iconLabel = new Label
             {
-                Text = "🏭",
+                Text = "[LF]",
                 Font = new Font("Segoe UI Emoji", 36F),
                 AutoSize = true,
                 Location = new Point(30, 30),

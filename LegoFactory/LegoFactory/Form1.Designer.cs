@@ -126,8 +126,9 @@ namespace LegoFactory
             lblLoginTitle.Location = new Point(30, 30);
 
             // --- Champ utilisateur ---
-            iconUser.Text = "??";
-            iconUser.Font = new Font("Segoe UI Emoji", 11F);
+            iconUser.Text = "Util.";
+            iconUser.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            iconUser.ForeColor = Color.FromArgb(30, 60, 114);
             iconUser.AutoSize = true;
             iconUser.Location = new Point(32, 112);
 
@@ -144,8 +145,9 @@ namespace LegoFactory
             panelUserLine.Location = new Point(30, 142);
 
             // --- Champ mot de passe ---
-            iconLock.Text = "??";
-            iconLock.Font = new Font("Segoe UI Emoji", 11F);
+            iconLock.Text = "MDP";
+            iconLock.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            iconLock.ForeColor = Color.FromArgb(30, 60, 114);
             iconLock.AutoSize = true;
             iconLock.Location = new Point(32, 177);
 
@@ -154,7 +156,7 @@ namespace LegoFactory
             tbmdp.Size = new Size(285, 28);
             tbmdp.BorderStyle = BorderStyle.None;
             tbmdp.BackColor = Color.White;
-            tbmdp.PasswordChar = '?';
+            tbmdp.PasswordChar = '*';
             tbmdp.PlaceholderText = "Mot de passe";
             tbmdp.TabIndex = 2;
 
@@ -207,7 +209,7 @@ namespace LegoFactory
             Font = new Font("Segoe UI", 9F);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Connexion — LegoFactory";
+            Text = "Connexion ï¿½ LegoFactory";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             BackColor = Color.FromArgb(245, 247, 251);

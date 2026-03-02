@@ -25,7 +25,7 @@ namespace LegoFactory
             var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
             var title = new Label
             {
-                Text = "👥  Utilisateurs et rôles",
+                Text = ">  Utilisateurs et rôles",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = PrimaryColor,
                 AutoSize = true,
@@ -43,7 +43,7 @@ namespace LegoFactory
                 Padding = new Padding(0, 6, 0, 6)
             };
 
-            btnEdit = CreateButton("✏️ Modifier rôle");
+            btnEdit = CreateButton(" Modifier rôle");
             btnEdit.Width = 160;
 
             panelToolbar.Controls.Add(btnEdit);

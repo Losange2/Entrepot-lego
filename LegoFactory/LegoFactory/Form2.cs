@@ -56,13 +56,13 @@ namespace LegoFactory
 
             if (currentUser == null)
             {
-                MessageBox.Show("Erreur: Utilisateur non identifié", "Erreur");
+                MessageBox.Show("Erreur: Utilisateur non identifiï¿½", "Erreur");
                 this.Close();
                 return;
             }
 
-            Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role})";
-            lblUserInfo.Text = $"?? {currentUser.Login} — {currentUser.Role}";
+            Text = $"LegoFactory â€” {currentUser.Login} ({currentUser.Role})";
+            lblUserInfo.Text = $"> {currentUser.Login} â€” {currentUser.Role}";
             ShowView(new DashboardWelcome());
         }
 

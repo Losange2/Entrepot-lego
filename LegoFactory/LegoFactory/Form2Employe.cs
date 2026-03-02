@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -56,7 +56,7 @@ namespace LegoFactory
             panelHeader.Dock = DockStyle.Top;
             panelHeader.Height = 80;
 
-            lblLogo.Text = "🏭  LegoFactory";
+            lblLogo.Text = "[LF]  LegoFactory";
             lblLogo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             lblLogo.ForeColor = Color.White;
             lblLogo.AutoSize = false;
@@ -75,12 +75,12 @@ namespace LegoFactory
 
             // Boutons menu
             int top = 0;
-            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt", top); top += 48;
-            StyleMenuButton(btnHistorique, "📋   Historique des actions", top); top += 48;
-            StyleMenuButton(btnStats, "📊   Statistiques & reporting", top);
+            StyleMenuButton(btnEntrepot, ">   Consulter l'entrepôt", top); top += 48;
+            StyleMenuButton(btnHistorique, ">   Historique des actions", top); top += 48;
+            StyleMenuButton(btnStats, ">   Statistiques & reporting", top);
 
             // Bouton déconnexion
-            btnLogout.Text = "🚪   Déconnexion";
+            btnLogout.Text = ">   Déconnexion";
             btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
             btnLogout.BackColor = Color.FromArgb(180, 50, 50);
@@ -169,7 +169,7 @@ namespace LegoFactory
             if (currentUser != null)
             {
                 Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role}) — LECTURE SEULE";
-                lblUserInfo.Text = $"👤 {currentUser.Login} — {currentUser.Role}";
+                lblUserInfo.Text = $"> {currentUser.Login} — {currentUser.Role}";
             }
             ShowView(new DashboardWelcome());
         }
