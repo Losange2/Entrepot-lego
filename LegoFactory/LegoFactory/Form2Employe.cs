@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public partial class Form2Employe : Form
     {

@@ -1,8 +1,8 @@
-ï»¿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public partial class Form2Admin : Form
     {
@@ -56,13 +56,13 @@ namespace page_de_co
 
             if (currentUser == null)
             {
-                MessageBox.Show("Erreur: Utilisateur non identifiÃ©", "Erreur");
+                MessageBox.Show("Erreur: Utilisateur non identifié", "Erreur");
                 this.Close();
                 return;
             }
 
-            Text = $"LegoFactory â€” {currentUser.Login} ({currentUser.Role})";
-            lblUserInfo.Text = $"ðŸ‘¤ {currentUser.Login} â€” {currentUser.Role}";
+            Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role})";
+            lblUserInfo.Text = $"?? {currentUser.Login} — {currentUser.Role}";
             ShowView(new DashboardWelcome());
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +8,7 @@ using DotNetEnv;
 using System.IO;
 
 
-namespace page_de_co
+namespace LegoFactory
 {
     public class DatabaseConnection
     {
@@ -16,7 +16,7 @@ namespace page_de_co
 
         public DatabaseConnection()
         {
-            // Charge les variables du fichier .env depuis le répertoire du projet
+            // Charge les variables du fichier .env depuis le r�pertoire du projet
             string envPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".env");
             envPath = Path.GetFullPath(envPath);
             if (File.Exists(envPath))

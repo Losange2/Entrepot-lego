@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public class EditCapaciteForm : Form
     {

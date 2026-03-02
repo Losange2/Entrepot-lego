@@ -2,7 +2,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using MySql.Data.MySqlClient;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public class UsersRolesView : UserControl
     {

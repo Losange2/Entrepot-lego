@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using MySql.Data.MySqlClient;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public class ImportExportView : UserControl
     {

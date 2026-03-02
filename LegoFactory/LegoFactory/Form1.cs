@@ -1,6 +1,6 @@
 using MySql.Data.MySqlClient;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public partial class Form1 : Form
     {

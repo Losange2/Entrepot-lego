@@ -1,7 +1,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace page_de_co
+namespace LegoFactory
 {
     public class DashboardWelcome : UserControl
     {

@@ -1,4 +1,4 @@
-﻿namespace page_de_co
+namespace LegoFactory
 {
     partial class Form1
     {
@@ -126,7 +126,7 @@
             lblLoginTitle.Location = new Point(30, 30);
 
             // --- Champ utilisateur ---
-            iconUser.Text = "👤";
+            iconUser.Text = "??";
             iconUser.Font = new Font("Segoe UI Emoji", 11F);
             iconUser.AutoSize = true;
             iconUser.Location = new Point(32, 112);
@@ -144,7 +144,7 @@
             panelUserLine.Location = new Point(30, 142);
 
             // --- Champ mot de passe ---
-            iconLock.Text = "🔒";
+            iconLock.Text = "??";
             iconLock.Font = new Font("Segoe UI Emoji", 11F);
             iconLock.AutoSize = true;
             iconLock.Location = new Point(32, 177);
@@ -154,7 +154,7 @@
             tbmdp.Size = new Size(285, 28);
             tbmdp.BorderStyle = BorderStyle.None;
             tbmdp.BackColor = Color.White;
-            tbmdp.PasswordChar = '●';
+            tbmdp.PasswordChar = '?';
             tbmdp.PlaceholderText = "Mot de passe";
             tbmdp.TabIndex = 2;
 
@@ -207,7 +207,7 @@
             Font = new Font("Segoe UI", 9F);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Connexion — LegoFactory";
+            Text = "Connexion � LegoFactory";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             BackColor = Color.FromArgb(245, 247, 251);

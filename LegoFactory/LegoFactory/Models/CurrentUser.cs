@@ -1,4 +1,4 @@
-namespace page_de_co
+namespace LegoFactory
 {
     public enum UserRole
     {
