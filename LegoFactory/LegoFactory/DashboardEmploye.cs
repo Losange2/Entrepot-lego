@@ -73,11 +73,13 @@ namespace LegoFactory
             lblUserInfo.Height = 35;
             lblUserInfo.BackColor = SidebarDark;
 
-            // Boutons menu
-            int top = 0;
-            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt", top); top += 48;
-            StyleMenuButton(btnHistorique, "📋   Historique des actions", top); top += 48;
-            StyleMenuButton(btnStats, "📊   Statistiques & reporting", top);
+            // Boutons menu - Configuration de base seulement
+            btnEntrepot.Dock = DockStyle.Top;
+            btnEntrepot.Height = 46;
+            btnHistorique.Dock = DockStyle.Top;
+            btnHistorique.Height = 46;
+            btnStats.Dock = DockStyle.Top;
+            btnStats.Height = 46;
 
             // Bouton déconnexion
             btnLogout.Text = "🚪   Déconnexion";
@@ -165,6 +167,11 @@ namespace LegoFactory
 
         private void DashboardEmploye_Load(object? sender, EventArgs e)
         {
+            // Appliquer les styles aux boutons
+            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt", 0);
+            StyleMenuButton(btnHistorique, "📋   Historique des actions", 48);
+            StyleMenuButton(btnStats, "📊   Statistiques & reporting", 96);
+
             var currentUser = CurrentUser.Instance;
             if (currentUser != null)
             {

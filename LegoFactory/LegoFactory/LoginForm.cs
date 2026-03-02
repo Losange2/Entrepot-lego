@@ -1,4 +1,5 @@
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace LegoFactory
 {
@@ -14,6 +15,9 @@ namespace LegoFactory
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            // Charger le logo
+            LoadLogo();
+
             tbutil.Focus();
 
             // Centrer la carte de login dans le panneau droit
@@ -42,6 +46,24 @@ namespace LegoFactory
                 (panelRight.Width - panelLoginBox.Width) / 2,
                 (panelRight.Height - panelLoginBox.Height) / 2
             );
+        }
+
+        private void LoadLogo()
+        {
+            try
+            {
+                string logoPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "img", "logo.png");
+                logoPath = Path.GetFullPath(logoPath);
+
+                if (File.Exists(logoPath))
+                {
+                    pblogo.Image = Image.FromFile(logoPath);
+                }
+            }
+            catch
+            {
+                // Si le logo ne peut pas être chargé, on continue sans
+            }
         }
 
         private static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle bounds, int radius)

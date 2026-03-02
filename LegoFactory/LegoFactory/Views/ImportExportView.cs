@@ -50,8 +50,14 @@ namespace LegoFactory
                 "Export CSV : tous les sets avec emplacements et quantités",
                 "Exporter CSV", BtnExport_Click);
 
+            // Card Export Template
+            var cardTemplate = CreateCard("📋  Exporter un modèle CSV vide",
+                "Fichier template avec les en-têtes pour faciliter l'import",
+                "Télécharger Modèle", BtnExportTemplate_Click);
+
             panelCards.Controls.Add(cardImport);
             panelCards.Controls.Add(cardExport);
+            panelCards.Controls.Add(cardTemplate);
 
             Controls.Add(panelCards);
             Controls.Add(panelHeader);
@@ -183,6 +189,24 @@ namespace LegoFactory
             catch (System.Exception ex)
             {
                 MessageBox.Show($"Erreur export : {ex.Message}");
+            }
+        }
+
+        private void BtnExportTemplate_Click(object? sender, System.EventArgs e)
+        {
+            using var dlg = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv", Title = "Télécharger modèle CSV", FileName = "modele_import_sets.csv" };
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+
+            try
+            {
+                using var writer = new StreamWriter(dlg.FileName);
+                writer.WriteLine("Reference;nom;AgeCible;NombresPieces;quantiter");
+
+                MessageBox.Show("Modèle CSV créé avec succès !\n\nVous pouvez maintenant remplir ce fichier et l'importer.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show($"Erreur création modèle : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

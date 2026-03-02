@@ -78,14 +78,21 @@ namespace LegoFactory
             lblUserInfo.Height = 35;
             lblUserInfo.BackColor = SidebarDark;
 
-            // Boutons menu (Dock Top, ordre inversé d'ajout)
-            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
-            StyleMenuButton(btnHistorique, "📋   Historique des actions");
-            StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
-            StyleMenuButton(btnSets, "🧱   Gérer les sets");
-            StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
-            StyleMenuButton(btnSync, "🔄   Synchroniser stock");
-            StyleMenuButton(btnStats, "📊   Statistiques & reporting");
+            // Boutons menu - Configuration de base seulement
+            btnEntrepot.Dock = DockStyle.Top;
+            btnEntrepot.Height = 46;
+            btnHistorique.Dock = DockStyle.Top;
+            btnHistorique.Height = 46;
+            btnEmplacements.Dock = DockStyle.Top;
+            btnEmplacements.Height = 46;
+            btnSets.Dock = DockStyle.Top;
+            btnSets.Height = 46;
+            btnImportExport.Dock = DockStyle.Top;
+            btnImportExport.Height = 46;
+            btnSync.Dock = DockStyle.Top;
+            btnSync.Height = 46;
+            btnStats.Dock = DockStyle.Top;
+            btnStats.Height = 46;
 
             // Logout
             btnLogout.Text = "🚪   Déconnexion";
@@ -176,6 +183,15 @@ namespace LegoFactory
 
         private void DashboardResponsable_Load(object? sender, EventArgs e)
         {
+            // Appliquer les styles aux boutons
+            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
+            StyleMenuButton(btnHistorique, "📋   Historique des actions");
+            StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
+            StyleMenuButton(btnSets, "🧱   Gérer les sets");
+            StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
+            StyleMenuButton(btnSync, "🔄   Synchroniser stock");
+            StyleMenuButton(btnStats, "📊   Statistiques & reporting");
+
             var currentUser = CurrentUser.Instance;
             if (currentUser != null)
             {
