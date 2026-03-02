@@ -6,6 +6,9 @@ namespace page_de_co
 {
     public class UsersRolesView : UserControl
     {
+        private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
+        private static readonly Color BgColor = Color.FromArgb(245, 247, 251);
+
         private readonly DatabaseConnection _db = new DatabaseConnection();
         private DataGridView grid;
         private Button btnAdd;
@@ -14,20 +17,93 @@ namespace page_de_co
 
         public UsersRolesView()
         {
-            var title = new Label { Text = "Utilisateurs et rôles", Font = new Font("Segoe UI", 16F, FontStyle.Bold), AutoSize = true, Location = new Point(20, 20) };
-            btnAdd = new Button { Text = "Ajouter", Location = new Point(20, 60), Width = 100 };
-            btnEdit = new Button { Text = "Modifier rôle", Location = new Point(130, 60), Width = 120 };
-            btnDelete = new Button { Text = "Supprimer", Location = new Point(260, 60), Width = 100 };
-            grid = new DataGridView { Location = new Point(20, 100), Width = 1000, Height = 540, ReadOnly = true, AllowUserToAddRows = false, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill, SelectionMode = DataGridViewSelectionMode.FullRowSelect, MultiSelect = false };
-            
-            Controls.Add(title);
-            Controls.Add(btnAdd);
-            Controls.Add(btnEdit);
-            Controls.Add(btnDelete);
+            BackColor = BgColor;
+            Dock = DockStyle.Fill;
+            Padding = new Padding(24);
+
+            // Header
+            var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
+            var title = new Label
+            {
+                Text = "👥  Utilisateurs et rôles",
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(0, 8)
+            };
+            panelHeader.Controls.Add(title);
+
+            // Toolbar
+            var panelToolbar = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                Height = 50,
+                FlowDirection = FlowDirection.LeftToRight,
+                BackColor = BgColor,
+                Padding = new Padding(0, 6, 0, 6)
+            };
+
+            btnEdit = CreateButton("✏️ Modifier rôle");
+            btnEdit.Width = 160;
+
+            panelToolbar.Controls.Add(btnEdit);
+
+            // Grid
+            grid = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                AllowUserToAddRows = false,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                RowHeadersVisible = false
+            };
+            StyleGrid(grid);
+
             Controls.Add(grid);
+            Controls.Add(panelToolbar);
+            Controls.Add(panelHeader);
 
             btnEdit.Click += BtnEdit_Click;
             Load += UsersRolesView_Load;
+        }
+
+        private static Button CreateButton(string text)
+        {
+            var btn = new Button
+            {
+                Text = text,
+                Width = 130,
+                Height = 36,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                BackColor = PrimaryColor,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand,
+                Margin = new Padding(0, 0, 10, 0)
+            };
+            btn.FlatAppearance.BorderSize = 0;
+            return btn;
+        }
+
+        private static void StyleGrid(DataGridView g)
+        {
+            g.EnableHeadersVisualStyles = false;
+            g.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 60, 114);
+            g.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            g.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            g.ColumnHeadersDefaultCellStyle.Padding = new Padding(6);
+            g.ColumnHeadersHeight = 38;
+            g.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
+            g.DefaultCellStyle.Padding = new Padding(4);
+            g.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 220, 255);
+            g.DefaultCellStyle.SelectionForeColor = Color.Black;
+            g.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 253);
+            g.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            g.GridColor = Color.FromArgb(230, 235, 242);
         }
 
         private void UsersRolesView_Load(object? sender, System.EventArgs e)

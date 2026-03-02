@@ -6,6 +6,9 @@ namespace page_de_co
 {
     public class HistoriqueView : UserControl
     {
+        private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
+        private static readonly Color BgColor = Color.FromArgb(245, 247, 251);
+
         private readonly DatabaseConnection _db = new DatabaseConnection();
         private DataGridView grid;
         private DateTimePicker dtpFrom;
@@ -14,34 +17,53 @@ namespace page_de_co
 
         public HistoriqueView()
         {
-            var title = new Label { Text = "Historique des actions", Font = new Font("Segoe UI", 16F, FontStyle.Bold), AutoSize = true, Location = new Point(20, 20) };
-            
-            var lblFrom = new Label { Text = "Du:", Location = new Point(20, 60), AutoSize = true };
-            dtpFrom = new DateTimePicker { Location = new Point(70, 58), Width = 150, Value = System.DateTime.Now.AddDays(-30) };
-            
-            var lblTo = new Label { Text = "Au:", Location = new Point(240, 60), AutoSize = true };
-            dtpTo = new DateTimePicker { Location = new Point(280, 58), Width = 150, Value = System.DateTime.Now };
-            
-            btnFilter = new Button { Text = "Filtrer", Location = new Point(450, 56), Width = 100 };
-            
-            grid = new DataGridView { Location = new Point(20, 100), Width = 1050, Height = 560, ReadOnly = true, AllowUserToAddRows = false, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill };
+            BackColor = BgColor;
+            Dock = DockStyle.Fill;
+            Padding = new Padding(24);
 
-            Controls.Add(title);
-            Controls.Add(lblFrom);
-            Controls.Add(dtpFrom);
-            Controls.Add(lblTo);
-            Controls.Add(dtpTo);
-            Controls.Add(btnFilter);
+            // Header
+            var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
+            var title = new Label
+            {
+                Text = "📋  Historique des actions",
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(0, 8)
+            };
+            panelHeader.Controls.Add(title);
+
+            // Toolbar filtres
+            var panelToolbar = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = BgColor, Padding = new Padding(0, 6, 0, 6) };
+            var lblFrom = new Label { Text = "Du :", Font = new Font("Segoe UI", 10F), ForeColor = Color.FromArgb(80, 90, 110), AutoSize = true, Location = new Point(0, 8) };
+            dtpFrom = new DateTimePicker { Location = new Point(40, 5), Width = 150, Font = new Font("Segoe UI", 9F), Value = System.DateTime.Now.AddDays(-30) };
+            var lblTo = new Label { Text = "Au :", Font = new Font("Segoe UI", 10F), ForeColor = Color.FromArgb(80, 90, 110), AutoSize = true, Location = new Point(210, 8) };
+            dtpTo = new DateTimePicker { Location = new Point(245, 5), Width = 150, Font = new Font("Segoe UI", 9F), Value = System.DateTime.Now };
+            btnFilter = StyleButton("Filtrer", 415, 3);
+            panelToolbar.Controls.AddRange(new Control[] { lblFrom, dtpFrom, lblTo, dtpTo, btnFilter });
+
+            // Grid
+            grid = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                AllowUserToAddRows = false,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                BorderStyle = BorderStyle.None,
+                BackgroundColor = Color.White,
+                RowHeadersVisible = false
+            };
+            StyleGrid(grid);
+
             Controls.Add(grid);
+            Controls.Add(panelToolbar);
+            Controls.Add(panelHeader);
 
             btnFilter.Click += BtnFilter_Click;
             Load += HistoriqueView_Load;
         }
 
-        private void HistoriqueView_Load(object? sender, System.EventArgs e)
-        {
-            RefreshGrid();
-        }
+        private void HistoriqueView_Load(object? sender, System.EventArgs e) => RefreshGrid();
 
         private void RefreshGrid()
         {
@@ -70,9 +92,40 @@ namespace page_de_co
             }
         }
 
-        private void BtnFilter_Click(object? sender, System.EventArgs e)
+        private void BtnFilter_Click(object? sender, System.EventArgs e) => RefreshGrid();
+
+        private static Button StyleButton(string text, int x, int y)
         {
-            RefreshGrid();
+            return new Button
+            {
+                Text = text,
+                Location = new Point(x, y),
+                Width = 110,
+                Height = 34,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                BackColor = Color.FromArgb(30, 60, 114),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                FlatAppearance = { BorderSize = 0 },
+                Cursor = Cursors.Hand
+            };
+        }
+
+        private static void StyleGrid(DataGridView g)
+        {
+            g.EnableHeadersVisualStyles = false;
+            g.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 60, 114);
+            g.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            g.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            g.ColumnHeadersDefaultCellStyle.Padding = new Padding(6);
+            g.ColumnHeadersHeight = 38;
+            g.DefaultCellStyle.Font = new Font("Segoe UI", 10F);
+            g.DefaultCellStyle.Padding = new Padding(4);
+            g.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 220, 255);
+            g.DefaultCellStyle.SelectionForeColor = Color.Black;
+            g.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 250, 253);
+            g.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            g.GridColor = Color.FromArgb(230, 235, 242);
         }
     }
 }

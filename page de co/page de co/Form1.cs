@@ -14,29 +14,67 @@ namespace page_de_co
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            tbutil.Focus();
 
+            // Centrer la carte de login dans le panneau droit
+            CenterLoginBox();
+            panelRight.Resize += (s, ev) => CenterLoginBox();
+
+            // Effet hover sur le bouton
+            btnconnect.MouseEnter += (s, ev) => btnconnect.BackColor = Color.FromArgb(40, 80, 150);
+            btnconnect.MouseLeave += (s, ev) => btnconnect.BackColor = Color.FromArgb(30, 60, 114);
+
+            // Cacher l'erreur quand on tape
+            tbutil.TextChanged += (s, ev) => HideError();
+            tbmdp.TextChanged += (s, ev) => HideError();
+
+            // Arrondir la carte (coins arrondis via Region)
+            panelLoginBox.Paint += (s, ev) =>
+            {
+                using var path = RoundedRect(panelLoginBox.ClientRectangle, 16);
+                panelLoginBox.Region = new Region(path);
+            };
         }
 
-        private void ltitre_Click(object sender, EventArgs e)
+        private void CenterLoginBox()
         {
-
+            panelLoginBox.Location = new Point(
+                (panelRight.Width - panelLoginBox.Width) / 2,
+                (panelRight.Height - panelLoginBox.Height) / 2
+            );
         }
 
-        private void pblogo_Click(object sender, EventArgs e)
+        private static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle bounds, int radius)
         {
-
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            int d = radius * 2;
+            path.AddArc(bounds.X, bounds.Y, d, d, 180, 90);
+            path.AddArc(bounds.Right - d, bounds.Y, d, d, 270, 90);
+            path.AddArc(bounds.Right - d, bounds.Bottom - d, d, d, 0, 90);
+            path.AddArc(bounds.X, bounds.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
-        private void tbutil_TextChanged(object sender, EventArgs e)
+        private void ShowError(string message)
         {
+            lblError.Text = message;
+            lblError.Visible = true;
+        }
 
+        private void HideError()
+        {
+            lblError.Visible = false;
+            lblError.Text = "";
         }
 
         private void btnconnect_Click(object sender, EventArgs e)
         {
+            HideError();
+
             if (string.IsNullOrWhiteSpace(tbutil.Text) || string.IsNullOrWhiteSpace(tbmdp.Text))
             {
-                MessageBox.Show("Merci de remplir le nom d'utilisateur et le mot de passe.");
+                ShowError("Merci de remplir le nom d'utilisateur et le mot de passe.");
                 return;
             }
 
@@ -44,19 +82,35 @@ namespace page_de_co
             {
                 if (UserExists(tbutil.Text.Trim(), tbmdp.Text))
                 {
-                    MessageBox.Show("Connexion réussie !");
-                    Form2 form2 = new Form2();
-                    form2.Show();
-                    this.Hide();
+                    // Pas de popup — on ouvre directement le dashboard
+                    Form? dashboard = null;
+                    if (CurrentUser.Instance.Role == UserRole.Employe)
+                    {
+                        dashboard = new Form2Employe();
+                    }
+                    else if (CurrentUser.Instance.Role == UserRole.Responsable)
+                    {
+                        dashboard = new Form2Responsable();
+                    }
+                    else if (CurrentUser.Instance.Role == UserRole.Admin)
+                    {
+                        dashboard = new Form2Admin();
+                    }
+
+                    if (dashboard != null)
+                    {
+                        dashboard.Show();
+                        this.Hide();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect.");
+                    ShowError("Nom d'utilisateur ou mot de passe incorrect.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la connexion à la base : {ex.Message}");
+                ShowError($"Erreur de connexion : {ex.Message}");
             }
         }
 
@@ -76,11 +130,10 @@ namespace page_de_co
             {
                 int userId = (int)reader["id"];
                 string roleStr = reader["role"]?.ToString() ?? "Employe";
-                
-                // Normaliser le rôle : convertir en PascalCase et gérer les variantes
+
                 UserRole role = ParseRole(roleStr);
-                
                 CurrentUser.Instance = new CurrentUser { Id = userId, Login = username, Role = role };
+
                 return true;
             }
             return false;
@@ -92,20 +145,17 @@ namespace page_de_co
             if (string.IsNullOrWhiteSpace(roleStr))
                 return UserRole.Employe;
 
-            // Normaliser : trim et première lettre majuscule
             var normalized = roleStr.Trim();
             if (normalized.Length > 0)
             {
                 normalized = char.ToUpper(normalized[0]) + normalized.Substring(1).ToLower();
             }
 
-            // Essayer de parser l'enum
             if (Enum.TryParse<UserRole>(normalized, ignoreCase: true, out var role))
             {
                 return role;
             }
 
-            // Fallback si rien ne marche
             return normalized.ToLower() switch
             {
                 "admin" => UserRole.Admin,
@@ -120,7 +170,7 @@ namespace page_de_co
 
         private void cbShowPassword_CheckedChanged(object sender, EventArgs e)
         {
-            tbmdp.PasswordChar = cbShowPassword.Checked ? '\0' : '*';
+            tbmdp.PasswordChar = cbShowPassword.Checked ? '\0' : '●';
         }
     }
 }

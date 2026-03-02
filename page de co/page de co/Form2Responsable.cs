@@ -1,31 +1,39 @@
-﻿namespace page_de_co
-{
-    partial class Form2Admin
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+namespace page_de_co
+{
+    public partial class Form2Responsable : Form
+    {
+        private Panel panelSidebar;
+        private Panel panelContent;
+        private Panel panelHeader;
+        private Label lblLogo;
+        private Label lblUserInfo;
+        private Button btnEntrepot;
+        private Button btnHistorique;
+        private Button btnEmplacements;
+        private Button btnSets;
+        private Button btnImportExport;
+        private Button btnSync;
+        private Button btnStats;
+        private Button btnLogout;
+        private Button? _activeButton;
+
+        private static readonly Color SidebarDark = Color.FromArgb(20, 40, 80);
+        private static readonly Color SidebarMain = Color.FromArgb(30, 60, 114);
+        private static readonly Color SidebarHover = Color.FromArgb(45, 85, 150);
+        private static readonly Color SidebarActive = Color.FromArgb(55, 100, 170);
+        private static readonly Color ContentBg = Color.FromArgb(245, 247, 251);
+
+        public Form2Responsable()
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            InitializeComponent();
+            this.Load += Form2Responsable_Load;
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             panelSidebar = new Panel();
@@ -38,7 +46,6 @@
             btnSets = new Button();
             btnImportExport = new Button();
             btnSync = new Button();
-            btnUsersRoles = new Button();
             btnStats = new Button();
             btnLogout = new Button();
             panelContent = new Panel();
@@ -71,14 +78,13 @@
             lblUserInfo.Height = 35;
             lblUserInfo.BackColor = SidebarDark;
 
-            // Boutons menu
+            // Boutons menu (Dock Top, ordre inversé d'ajout)
             StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
             StyleMenuButton(btnHistorique, "📋   Historique des actions");
             StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
             StyleMenuButton(btnSets, "🧱   Gérer les sets");
             StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
             StyleMenuButton(btnSync, "🔄   Synchroniser stock");
-            StyleMenuButton(btnUsersRoles, "👥   Utilisateurs et rôles");
             StyleMenuButton(btnStats, "📊   Statistiques & reporting");
 
             // Logout
@@ -101,14 +107,12 @@
             btnSets.Click += btnSets_Click;
             btnImportExport.Click += btnImportExport_Click;
             btnSync.Click += btnSync_Click;
-            btnUsersRoles.Click += btnUsersRoles_Click;
             btnStats.Click += btnStats_Click;
             btnLogout.Click += btnLogout_Click;
 
             // Assemblage sidebar
             var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain };
             panelMenu.Controls.Add(btnStats);
-            panelMenu.Controls.Add(btnUsersRoles);
             panelMenu.Controls.Add(btnSync);
             panelMenu.Controls.Add(btnImportExport);
             panelMenu.Controls.Add(btnSets);
@@ -132,29 +136,75 @@
             MinimumSize = new Size(800, 500);
             Controls.Add(panelContent);
             Controls.Add(panelSidebar);
-            Name = "Form2Admin";
-            Text = "LegoFactory — Admin";
+            Name = "Form2Responsable";
+            Text = "LegoFactory — Responsable";
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = ContentBg;
-            Load += Form2_Load;
             ResumeLayout(false);
         }
 
-        #endregion
+        private void StyleMenuButton(Button b, string text)
+        {
+            b.Text = text;
+            b.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            b.ForeColor = Color.FromArgb(200, 215, 240);
+            b.BackColor = SidebarMain;
+            b.FlatStyle = FlatStyle.Flat;
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = SidebarHover;
+            b.Height = 46;
+            b.Dock = DockStyle.Top;
+            b.TextAlign = ContentAlignment.MiddleLeft;
+            b.Padding = new Padding(20, 0, 0, 0);
+            b.Cursor = Cursors.Hand;
 
-        private Panel panelSidebar;
-        private Panel panelHeader;
-        private Label lblLogo;
-        private Label lblUserInfo;
-        private Panel panelContent;
-        private Button btnEntrepot;
-        private Button btnHistorique;
-        private Button btnEmplacements;
-        private Button btnSets;
-        private Button btnImportExport;
-        private Button btnSync;
-        private Button btnUsersRoles;
-        private Button btnStats;
-        private Button btnLogout;
+            b.MouseEnter += (s, e) => { if (b != _activeButton) b.BackColor = SidebarHover; };
+            b.MouseLeave += (s, e) => { if (b != _activeButton) b.BackColor = SidebarMain; };
+        }
+
+        private void SetActiveButton(Button btn)
+        {
+            if (_activeButton != null)
+            {
+                _activeButton.BackColor = SidebarMain;
+                _activeButton.ForeColor = Color.FromArgb(200, 215, 240);
+            }
+            _activeButton = btn;
+            _activeButton.BackColor = SidebarActive;
+            _activeButton.ForeColor = Color.White;
+        }
+
+        private void Form2Responsable_Load(object? sender, EventArgs e)
+        {
+            var currentUser = CurrentUser.Instance;
+            if (currentUser != null)
+            {
+                Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role})";
+                lblUserInfo.Text = $"👤 {currentUser.Login} — {currentUser.Role}";
+            }
+            ShowView(new DashboardWelcome());
+        }
+
+        private void ShowView(Control view)
+        {
+            panelContent.Controls.Clear();
+            view.Dock = DockStyle.Fill;
+            panelContent.Controls.Add(view);
+        }
+
+        private void btnEntrepot_Click(object? sender, EventArgs e) { SetActiveButton(btnEntrepot); ShowView(new EntrepotView()); }
+        private void btnHistorique_Click(object? sender, EventArgs e) { SetActiveButton(btnHistorique); ShowView(new HistoriqueView()); }
+        private void btnEmplacements_Click(object? sender, EventArgs e) { SetActiveButton(btnEmplacements); ShowView(new EmplacementsView()); }
+        private void btnSets_Click(object? sender, EventArgs e) { SetActiveButton(btnSets); ShowView(new SetsView()); }
+        private void btnImportExport_Click(object? sender, EventArgs e) { SetActiveButton(btnImportExport); ShowView(new ImportExportView()); }
+        private void btnSync_Click(object? sender, EventArgs e) { SetActiveButton(btnSync); ShowView(new SyncView()); }
+        private void btnStats_Click(object? sender, EventArgs e) { SetActiveButton(btnStats); ShowView(new StatsView()); }
+
+        private void btnLogout_Click(object? sender, EventArgs e)
+        {
+            CurrentUser.Instance = null;
+            new Form1().Show();
+            this.Close();
+        }
     }
 }

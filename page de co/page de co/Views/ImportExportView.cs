@@ -7,30 +7,107 @@ namespace page_de_co
 {
     public class ImportExportView : UserControl
     {
+        private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
+        private static readonly Color BgColor = Color.FromArgb(245, 247, 251);
+
         private readonly DatabaseConnection _db = new DatabaseConnection();
 
         public ImportExportView()
         {
-            var title = new Label { Text = "Import / Export", Font = new Font("Segoe UI", 16F, FontStyle.Bold), AutoSize = true, Location = new Point(20, 20) };
-            
-            var lblImport = new Label { Text = "Importer des sets depuis CSV:", Location = new Point(20, 70), AutoSize = true, Font = new Font("Segoe UI", 11F, FontStyle.Bold) };
-            var lblFormatImport = new Label { Text = "Format CSV: Reference;nom;AgeCible;NombresPieces;quantiter", Location = new Point(40, 100), AutoSize = true, ForeColor = Color.Gray };
-            var btnImport = new Button { Text = "Importer CSV", Location = new Point(40, 130), Width = 180 };
-            
-            var lblExport = new Label { Text = "Exporter les positions actuelles:", Location = new Point(20, 200), AutoSize = true, Font = new Font("Segoe UI", 11F, FontStyle.Bold) };
-            var lblFormatExport = new Label { Text = "Export CSV: tous les sets avec emplacements et quantités", Location = new Point(40, 230), AutoSize = true, ForeColor = Color.Gray };
-            var btnExport = new Button { Text = "Exporter positions CSV", Location = new Point(40, 260), Width = 200 };
+            BackColor = BgColor;
+            Dock = DockStyle.Fill;
+            Padding = new Padding(24);
 
-            Controls.Add(title);
-            Controls.Add(lblImport);
-            Controls.Add(lblFormatImport);
-            Controls.Add(btnImport);
-            Controls.Add(lblExport);
-            Controls.Add(lblFormatExport);
-            Controls.Add(btnExport);
+            // Header
+            var panelHeader = new Panel { Dock = DockStyle.Top, Height = 50, BackColor = BgColor };
+            var title = new Label
+            {
+                Text = "📁  Import / Export",
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(0, 8)
+            };
+            panelHeader.Controls.Add(title);
 
-            btnImport.Click += BtnImport_Click;
-            btnExport.Click += BtnExport_Click;
+            // Contenu avec 2 cartes
+            var panelCards = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoScroll = true,
+                Padding = new Padding(0, 10, 0, 0)
+            };
+
+            // Card Import
+            var cardImport = CreateCard("📥  Importer des sets depuis CSV",
+                "Format CSV : Reference;nom;AgeCible;NombresPieces;quantiter",
+                "Importer CSV", BtnImport_Click);
+
+            // Card Export
+            var cardExport = CreateCard("📤  Exporter les positions actuelles",
+                "Export CSV : tous les sets avec emplacements et quantités",
+                "Exporter CSV", BtnExport_Click);
+
+            panelCards.Controls.Add(cardImport);
+            panelCards.Controls.Add(cardExport);
+
+            Controls.Add(panelCards);
+            Controls.Add(panelHeader);
+        }
+
+        private Panel CreateCard(string titleText, string descText, string btnText, System.EventHandler onClick)
+        {
+            var card = new Panel
+            {
+                Width = 500,
+                Height = 160,
+                BackColor = Color.White,
+                Margin = new Padding(0, 0, 0, 16),
+                Padding = new Padding(24)
+            };
+            card.Paint += (s, e) =>
+            {
+                using var path = RoundedRect(card.ClientRectangle, 12);
+                card.Region = new Region(path);
+            };
+
+            var lbl = new Label
+            {
+                Text = titleText,
+                Font = new Font("Segoe UI", 13F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(24, 20)
+            };
+            var desc = new Label
+            {
+                Text = descText,
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.Gray,
+                AutoSize = true,
+                Location = new Point(26, 55)
+            };
+            var btn = new Button
+            {
+                Text = btnText,
+                Location = new Point(24, 95),
+                Width = 180,
+                Height = 38,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                BackColor = PrimaryColor,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Click += onClick;
+
+            card.Controls.Add(lbl);
+            card.Controls.Add(desc);
+            card.Controls.Add(btn);
+            return card;
         }
 
         private void BtnImport_Click(object? sender, System.EventArgs e)
@@ -66,11 +143,11 @@ namespace page_de_co
                     catch { errors++; }
                 }
 
-                MessageBox.Show($"Import terminé.\nImportés: {imported}\nErreurs: {errors}");
+                MessageBox.Show($"Import terminé.\nImportés : {imported}\nErreurs : {errors}");
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Erreur import: {ex.Message}");
+                MessageBox.Show($"Erreur import : {ex.Message}");
             }
         }
 
@@ -101,12 +178,24 @@ namespace page_de_co
                     count++;
                 }
 
-                MessageBox.Show($"Export terminé: {count} lignes exportées vers {dlg.FileName}");
+                MessageBox.Show($"Export terminé : {count} lignes exportées.");
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Erreur export: {ex.Message}");
+                MessageBox.Show($"Erreur export : {ex.Message}");
             }
+        }
+
+        private static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle bounds, int radius)
+        {
+            var path = new System.Drawing.Drawing2D.GraphicsPath();
+            int d = radius * 2;
+            path.AddArc(bounds.X, bounds.Y, d, d, 180, 90);
+            path.AddArc(bounds.Right - d, bounds.Y, d, d, 270, 90);
+            path.AddArc(bounds.Right - d, bounds.Bottom - d, d, d, 0, 90);
+            path.AddArc(bounds.X, bounds.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+            return path;
         }
     }
 }

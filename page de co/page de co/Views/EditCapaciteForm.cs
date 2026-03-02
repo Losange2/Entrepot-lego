@@ -5,6 +5,8 @@ namespace page_de_co
 {
     public class EditCapaciteForm : Form
     {
+        private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
+
         private NumericUpDown nudCap;
         private Button btnOk;
         private Button btnCancel;
@@ -12,19 +14,46 @@ namespace page_de_co
 
         public EditCapaciteForm(string code, int capacite)
         {
-            Text = $"Modifier capacité - {code}";
+            Text = $"✏️ Modifier capacité - {code}";
             StartPosition = FormStartPosition.CenterParent;
-            Width = 360;
-            Height = 180;
+            Width = 400;
+            Height = 200;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
+            BackColor = Color.FromArgb(245, 247, 251);
+            Font = new Font("Segoe UI", 10F);
 
-            var lbl = new Label { Text = "Capacité max", Location = new Point(20, 20), AutoSize = true };
-            nudCap = new NumericUpDown { Location = new Point(140, 18), Width = 120, Minimum = 1, Maximum = 100000, Value = capacite > 0 ? capacite : 100 };
+            var lbl = new Label { Text = "Capacité max", Location = new Point(24, 24), AutoSize = true, ForeColor = PrimaryColor, Font = new Font("Segoe UI", 10F, FontStyle.Bold) };
+            nudCap = new NumericUpDown { Location = new Point(160, 22), Width = 140, Minimum = 1, Maximum = 100000, Value = capacite > 0 ? capacite : 100, Font = new Font("Segoe UI", 10F) };
 
-            btnOk = new Button { Text = "Enregistrer", Location = new Point(140, 70), Width = 90 };
-            btnCancel = new Button { Text = "Annuler", Location = new Point(240, 70), Width = 90 };
+            btnOk = new Button
+            {
+                Text = "✔  Enregistrer",
+                Location = new Point(160, 80),
+                Width = 120,
+                Height = 36,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                BackColor = PrimaryColor,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnOk.FlatAppearance.BorderSize = 0;
+
+            btnCancel = new Button
+            {
+                Text = "Annuler",
+                Location = new Point(290, 80),
+                Width = 80,
+                Height = 36,
+                Font = new Font("Segoe UI", 10F),
+                BackColor = Color.White,
+                ForeColor = PrimaryColor,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnCancel.FlatAppearance.BorderColor = PrimaryColor;
 
             btnOk.Click += (s, e) => { DialogResult = DialogResult.OK; Close(); };
             btnCancel.Click += (s, e) => { DialogResult = DialogResult.Cancel; Close(); };
