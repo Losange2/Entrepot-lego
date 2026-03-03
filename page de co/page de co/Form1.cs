@@ -45,27 +45,9 @@ namespace page_de_co
                 if (UserExists(tbutil.Text.Trim(), tbmdp.Text))
                 {
                     MessageBox.Show("Connexion réussie !");
-                    
-                    // Ouvrir le bon dashboard selon le rôle
-                    Form dashboard = null;
-                    if (CurrentUser.Instance.Role == UserRole.Employe)
-                    {
-                        dashboard = new Form2Employe();
-                    }
-                    else if (CurrentUser.Instance.Role == UserRole.Responsable)
-                    {
-                        dashboard = new Form2Responsable();
-                    }
-                    else if (CurrentUser.Instance.Role == UserRole.Admin)
-                    {
-                        dashboard = new Form2Admin();
-                    }
-                    
-                    if (dashboard != null)
-                    {
-                        dashboard.Show();
-                        this.Hide();
-                    }
+                    Form2 form2 = new Form2();
+                    form2.Show();
+                    this.Hide();
                 }
                 else
                 {
@@ -95,11 +77,10 @@ namespace page_de_co
                 int userId = (int)reader["id"];
                 string roleStr = reader["role"]?.ToString() ?? "Employe";
                 
-                // Normaliser le rôle
+                // Normaliser le rôle : convertir en PascalCase et gérer les variantes
                 UserRole role = ParseRole(roleStr);
                 
                 CurrentUser.Instance = new CurrentUser { Id = userId, Login = username, Role = role };
-                
                 return true;
             }
             return false;
