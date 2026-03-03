@@ -43,10 +43,15 @@ namespace LegoFactory
                 Padding = new Padding(0, 6, 0, 6)
             };
 
-            btnEdit = CreateButton("✏️ Modifier rôle");
-            btnEdit.Width = 160;
+            btnAdd = CreateButton("➕ Ajouter");
+            btnEdit = CreateButton("✏️ Modifier");
+            btnEdit.Width = 140;
+            btnDelete = CreateButton("🗑️ Supprimer");
+            btnDelete.BackColor = Color.FromArgb(180, 50, 50);
 
+            panelToolbar.Controls.Add(btnAdd);
             panelToolbar.Controls.Add(btnEdit);
+            panelToolbar.Controls.Add(btnDelete);
 
             // Grid
             grid = new DataGridView
@@ -67,7 +72,9 @@ namespace LegoFactory
             Controls.Add(panelToolbar);
             Controls.Add(panelHeader);
 
+            btnAdd.Click += BtnAdd_Click;
             btnEdit.Click += BtnEdit_Click;
+            btnDelete.Click += BtnDelete_Click;
             Load += UsersRolesView_Load;
         }
 
@@ -116,7 +123,7 @@ namespace LegoFactory
             try
             {
                 using var conn = _db.GetConnection();
-                using var cmd = new MySqlCommand("SELECT id, nom, login, role FROM Utilisateur ORDER BY role, login", conn);
+                using var cmd = new MySqlCommand("SELECT id, nom AS Nom, login AS Login, role AS Rôle FROM Utilisateur ORDER BY role, login", conn);
                 using var reader = cmd.ExecuteReader();
                 var table = new System.Data.DataTable();
                 table.Load(reader);
@@ -129,33 +136,119 @@ namespace LegoFactory
             }
         }
 
-        private void BtnEdit_Click(object? sender, System.EventArgs e)
+        private void BtnAdd_Click(object? sender, System.EventArgs e)
         {
-            if (grid.CurrentRow == null)
-            {
-                MessageBox.Show("Sélectionnez un utilisateur.");
-                return;
-            }
-            var id = grid.CurrentRow.Cells["id"].Value;
-            var login = grid.CurrentRow.Cells["login"].Value?.ToString();
-            var currentRole = grid.CurrentRow.Cells["role"].Value?.ToString() ?? "Employe";
-
-            using var dlg = new EditRoleForm(login ?? "", currentRole);
+            using var dlg = new AddUserForm();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     using var conn = _db.GetConnection();
-                    using var cmd = new MySqlCommand("UPDATE Utilisateur SET role = @role WHERE id = @id", conn);
+                    using var cmd = new MySqlCommand(
+                        "INSERT INTO Utilisateur (nom, login, motDePasse, role) VALUES (@nom, @login, @mdp, @role)", conn);
+                    cmd.Parameters.AddWithValue("@nom", dlg.Nom);
+                    cmd.Parameters.AddWithValue("@login", dlg.Login);
+                    cmd.Parameters.AddWithValue("@mdp", dlg.Password);
+                    cmd.Parameters.AddWithValue("@role", dlg.SelectedRole);
+                    cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Ajout utilisateur", $"Utilisateur '{dlg.Login}' créé (rôle: {dlg.SelectedRole})");
+                    RefreshGrid();
+                }
+                catch (MySqlException ex) when (ex.Number == 1062)
+                {
+                    MessageBox.Show("Ce login existe déjà. Veuillez en choisir un autre.", "Doublon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Erreur création: {ex.Message}");
+                }
+            }
+        }
+
+        private void BtnEdit_Click(object? sender, System.EventArgs e)
+        {
+            if (grid.CurrentRow == null)
+            {
+                MessageBox.Show("Sélectionnez un utilisateur à modifier.");
+                return;
+            }
+            var id = grid.CurrentRow.Cells["id"].Value;
+            var nom = grid.CurrentRow.Cells["Nom"].Value?.ToString() ?? "";
+            var login = grid.CurrentRow.Cells["Login"].Value?.ToString() ?? "";
+            var currentRole = grid.CurrentRow.Cells["Rôle"].Value?.ToString() ?? "Employe";
+
+            using var dlg = new EditUserForm(nom, login, currentRole);
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using var conn = _db.GetConnection();
+                    string sql;
+                    if (!string.IsNullOrWhiteSpace(dlg.Password))
+                    {
+                        sql = "UPDATE Utilisateur SET nom = @nom, login = @login, motDePasse = @mdp, role = @role WHERE id = @id";
+                    }
+                    else
+                    {
+                        sql = "UPDATE Utilisateur SET nom = @nom, login = @login, role = @role WHERE id = @id";
+                    }
+                    using var cmd = new MySqlCommand(sql, conn);
+                    cmd.Parameters.AddWithValue("@nom", dlg.Nom);
+                    cmd.Parameters.AddWithValue("@login", dlg.UserLogin);
                     cmd.Parameters.AddWithValue("@role", dlg.SelectedRole);
                     cmd.Parameters.AddWithValue("@id", id);
+                    if (!string.IsNullOrWhiteSpace(dlg.Password))
+                    {
+                        cmd.Parameters.AddWithValue("@mdp", dlg.Password);
+                    }
                     cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Modification utilisateur", $"Utilisateur '{dlg.UserLogin}' modifié (rôle: {dlg.SelectedRole})");
                     RefreshGrid();
-                    MessageBox.Show("Rôle mis à jour. Reconnexion nécessaire pour appliquer.");
+                }
+                catch (MySqlException ex) when (ex.Number == 1062)
+                {
+                    MessageBox.Show("Ce login existe déjà. Veuillez en choisir un autre.", "Doublon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 catch (System.Exception ex)
                 {
                     MessageBox.Show($"Erreur modification: {ex.Message}");
+                }
+            }
+        }
+
+        private void BtnDelete_Click(object? sender, System.EventArgs e)
+        {
+            if (grid.CurrentRow == null)
+            {
+                MessageBox.Show("Sélectionnez un utilisateur à supprimer.");
+                return;
+            }
+            var id = grid.CurrentRow.Cells["id"].Value;
+            var login = grid.CurrentRow.Cells["Login"].Value?.ToString() ?? "";
+
+            // Empêcher la suppression de son propre compte
+            var currentUser = CurrentUser.Instance;
+            if (currentUser != null && currentUser.Login == login)
+            {
+                MessageBox.Show("Vous ne pouvez pas supprimer votre propre compte.", "Interdit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (MessageBox.Show($"Supprimer l'utilisateur '{login}' ?\n\nCette action est irréversible.",
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                try
+                {
+                    using var conn = _db.GetConnection();
+                    using var cmd = new MySqlCommand("DELETE FROM Utilisateur WHERE id = @id", conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Suppression utilisateur", $"Utilisateur '{login}' supprimé");
+                    RefreshGrid();
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Erreur suppression: {ex.Message}");
                 }
             }
         }

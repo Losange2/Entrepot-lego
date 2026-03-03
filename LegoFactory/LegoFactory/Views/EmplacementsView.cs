@@ -73,11 +73,18 @@ namespace LegoFactory
             try
             {
                 using var conn = _db.GetConnection();
-                using var cmd = new MySqlCommand("SELECT id, code, capaciteMax, DateEntree, DateSorti FROM Emplacement ORDER BY id DESC", conn);
+                using var cmd = new MySqlCommand(
+                    "SELECT e.id, e.code AS Code, e.capaciteMax AS 'Capacite Max', " +
+                    "e.DateEntree AS 'Date Entree', e.DateSorti AS 'Date Sortie', " +
+                    "IFNULL(SUM(s.quantiter), 0) AS 'Sets stockes' " +
+                    "FROM Emplacement e LEFT JOIN stocker s ON s.emplacement_id = e.id " +
+                    "GROUP BY e.id, e.code, e.capaciteMax, e.DateEntree, e.DateSorti " +
+                    "ORDER BY e.code", conn);
                 using var reader = cmd.ExecuteReader();
                 var table = new System.Data.DataTable();
                 table.Load(reader);
                 grid.DataSource = table;
+                if (grid.Columns.Contains("id")) grid.Columns["id"].Visible = false;
             }
             catch (System.Exception ex)
             {
@@ -94,10 +101,12 @@ namespace LegoFactory
                 {
                     string code = GenerateCode(dlg.Etagere, dlg.Etage, dlg.Rangee);
                     using var conn = _db.GetConnection();
-                    using var cmd = new MySqlCommand("INSERT INTO Emplacement(code, capaciteMax, DateEntree) VALUES(@code, @cap, CURRENT_DATE())", conn);
+                    using var cmd = new MySqlCommand("INSERT INTO Emplacement(code, capaciteMax, DateEntree, zone_id) VALUES(@code, @cap, CURRENT_DATE(), @zoneId)", conn);
                     cmd.Parameters.AddWithValue("@code", code);
                     cmd.Parameters.AddWithValue("@cap", dlg.CapaciteMax);
+                    cmd.Parameters.AddWithValue("@zoneId", dlg.SelectedZoneId);
                     cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Ajout emplacement", $"Emplacement '{code}' ajouté (capacité: {dlg.CapaciteMax})");
                     RefreshGrid();
                 }
                 catch (System.Exception ex)
@@ -107,19 +116,19 @@ namespace LegoFactory
             }
         }
 
-        private string GenerateCode(char etagere, int etage, int rangee)
+        private string GenerateCode(string etagere, int etage, int rangee)
         {
             int etageCode = etage * 100;
             int codeNum = etageCode + rangee;
-            return $"{char.ToUpper(etagere)}{codeNum}";
+            return $"{etagere.ToUpper()}{codeNum}";
         }
 
         private void BtnEdit_Click(object? sender, System.EventArgs e)
         {
-            if (grid.CurrentRow == null) { MessageBox.Show("Sélectionnez un emplacement à modifier."); return; }
+            if (grid.CurrentRow == null) { MessageBox.Show("Selectionnez un emplacement a modifier."); return; }
             var id = grid.CurrentRow.Cells["id"].Value;
-            var code = grid.CurrentRow.Cells["code"].Value?.ToString();
-            var capStr = grid.CurrentRow.Cells["capaciteMax"].Value?.ToString();
+            var code = grid.CurrentRow.Cells["Code"].Value?.ToString();
+            var capStr = grid.CurrentRow.Cells["Capacite Max"].Value?.ToString();
             int cap = 0; int.TryParse(capStr, out cap);
 
             using var dlg = new EditCapaciteForm(code ?? "", cap);
@@ -132,6 +141,7 @@ namespace LegoFactory
                     cmd.Parameters.AddWithValue("@cap", dlg.CapaciteMax);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Modification emplacement", $"Emplacement '{code}' modifié (nouvelle capacité: {dlg.CapaciteMax})");
                     RefreshGrid();
                 }
                 catch (System.Exception ex)
@@ -143,23 +153,43 @@ namespace LegoFactory
 
         private void BtnDelete_Click(object? sender, System.EventArgs e)
         {
-            if (grid.CurrentRow == null) { MessageBox.Show("Sélectionnez un emplacement à supprimer."); return; }
+            if (grid.CurrentRow == null) { MessageBox.Show("Selectionnez un emplacement a supprimer."); return; }
             var id = grid.CurrentRow.Cells["id"].Value;
-            var code = grid.CurrentRow.Cells["code"].Value?.ToString();
-            if (MessageBox.Show($"Supprimer l'emplacement {code} ?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            var code = grid.CurrentRow.Cells["Code"].Value?.ToString();
+
+            try
             {
-                try
+                using var conn = _db.GetConnection();
+
+                // Vérifier s'il y a des sets stockés dans cet emplacement
+                using (var cmdCheck = new MySqlCommand("SELECT COUNT(*) FROM stocker WHERE emplacement_id = @id", conn))
                 {
-                    using var conn = _db.GetConnection();
+                    cmdCheck.Parameters.AddWithValue("@id", id);
+                    int nbSets = System.Convert.ToInt32(cmdCheck.ExecuteScalar());
+                    if (nbSets > 0)
+                    {
+                        MessageBox.Show(
+                            $"Impossible de supprimer l'emplacement '{code}'.\n\n" +
+                            $"Il contient encore {nbSets} set(s). Veuillez d'abord retirer les sets de cet emplacement.",
+                            "Suppression impossible", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+                if (MessageBox.Show($"Supprimer l'emplacement '{code}' ?\n\nCette action est irreversible.",
+                    "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
                     using var cmd = new MySqlCommand("DELETE FROM Emplacement WHERE id = @id", conn);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
+                    HistoriqueHelper.Log("Suppression emplacement", $"Emplacement '{code}' supprime");
                     RefreshGrid();
+                    MessageBox.Show($"Emplacement '{code}' supprime.", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch (System.Exception ex)
-                {
-                    MessageBox.Show($"Erreur suppression: {ex.Message}");
-                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show($"Erreur suppression: {ex.Message}");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Drawing;
 using MySql.Data.MySqlClient;
 
@@ -13,6 +14,7 @@ namespace LegoFactory
         private DataGridView grid;
         private DateTimePicker dtpFrom;
         private DateTimePicker dtpTo;
+        private TextBox tbSearch;
         private Button btnFilter;
 
         public HistoriqueView()
@@ -33,14 +35,128 @@ namespace LegoFactory
             };
             panelHeader.Controls.Add(title);
 
-            // Toolbar filtres
-            var panelToolbar = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = BgColor, Padding = new Padding(0, 6, 0, 6) };
-            var lblFrom = new Label { Text = "Du :", Font = new Font("Segoe UI", 10F), ForeColor = Color.FromArgb(80, 90, 110), AutoSize = true, Location = new Point(0, 8) };
-            dtpFrom = new DateTimePicker { Location = new Point(40, 5), Width = 150, Font = new Font("Segoe UI", 9F), Value = System.DateTime.Now.AddDays(-30) };
-            var lblTo = new Label { Text = "Au :", Font = new Font("Segoe UI", 10F), ForeColor = Color.FromArgb(80, 90, 110), AutoSize = true, Location = new Point(210, 8) };
-            dtpTo = new DateTimePicker { Location = new Point(245, 5), Width = 150, Font = new Font("Segoe UI", 9F), Value = System.DateTime.Now };
-            btnFilter = StyleButton("Filtrer", 415, 3);
-            panelToolbar.Controls.AddRange(new Control[] { lblFrom, dtpFrom, lblTo, dtpTo, btnFilter });
+            // ====== Barre de filtrage simple ======
+            var panelToolbar = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 50,
+                BackColor = Color.White,
+                Padding = new Padding(16, 8, 16, 8)
+            };
+
+            var lblFrom = new Label
+            {
+                Text = "Du",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(16, 16)
+            };
+            dtpFrom = new DateTimePicker
+            {
+                Width = 120,
+                Font = new Font("Segoe UI", 9.5F),
+                Format = DateTimePickerFormat.Custom,
+                CustomFormat = "dd/MM/yyyy",
+                Value = DateTime.Now.AddDays(-30),
+                Location = new Point(42, 12)
+            };
+            var lblTo = new Label
+            {
+                Text = "au",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(172, 16)
+            };
+            dtpTo = new DateTimePicker
+            {
+                Width = 120,
+                Font = new Font("Segoe UI", 9.5F),
+                Format = DateTimePickerFormat.Custom,
+                CustomFormat = "dd/MM/yyyy",
+                Value = DateTime.Now,
+                Location = new Point(196, 12)
+            };
+
+            tbSearch = new TextBox
+            {
+                Width = 200,
+                Font = new Font("Segoe UI", 10F),
+                PlaceholderText = "🔍 Rechercher...",
+                Location = new Point(340, 12)
+            };
+
+            btnFilter = new Button
+            {
+                Text = "Filtrer",
+                Width = 75,
+                Height = 28,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                BackColor = PrimaryColor,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnFilter.FlatAppearance.BorderSize = 0;
+
+            var btnReset = new Button
+            {
+                Text = "Reset",
+                Width = 65,
+                Height = 28,
+                Font = new Font("Segoe UI", 9F),
+                BackColor = Color.White,
+                ForeColor = PrimaryColor,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnReset.FlatAppearance.BorderColor = PrimaryColor;
+            btnReset.Click += (s, e) =>
+            {
+                dtpFrom.Value = DateTime.Now.AddDays(-30);
+                dtpTo.Value = DateTime.Now;
+                tbSearch.Text = "";
+                RefreshGrid();
+            };
+
+            // Positionnement responsive via Resize
+            panelToolbar.Resize += (s, e) =>
+            {
+                int w = panelToolbar.ClientSize.Width;
+                int right = w - 16;
+                int dateEndX = 326; // fin de la zone dates
+
+                bool twoRows = (w < 620); // seuil pour passer en 2 lignes
+
+                if (twoRows)
+                {
+                    // Ligne 1 : dates + boutons
+                    btnReset.Location = new Point(right - btnReset.Width, 11);
+                    btnFilter.Location = new Point(btnReset.Left - btnFilter.Width - 6, 11);
+
+                    // Ligne 2 : recherche pleine largeur
+                    panelToolbar.Height = 90;
+                    tbSearch.Visible = true;
+                    tbSearch.Location = new Point(16, 50);
+                    tbSearch.Width = w - 32;
+                }
+                else
+                {
+                    // Tout sur 1 ligne
+                    panelToolbar.Height = 50;
+                    btnReset.Location = new Point(right - btnReset.Width, 11);
+                    btnFilter.Location = new Point(btnReset.Left - btnFilter.Width - 6, 11);
+
+                    int searchLeft = dateEndX + 14;
+                    int searchRight = btnFilter.Left - 12;
+                    tbSearch.Visible = true;
+                    tbSearch.Location = new Point(searchLeft, 12);
+                    tbSearch.Width = Math.Max(searchRight - searchLeft, 80);
+                }
+            };
+
+            panelToolbar.Controls.AddRange(new Control[] { lblFrom, dtpFrom, lblTo, dtpTo, tbSearch, btnFilter, btnReset });
 
             // Grid
             grid = new DataGridView
@@ -51,7 +167,9 @@ namespace LegoFactory
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 BorderStyle = BorderStyle.None,
                 BackgroundColor = Color.White,
-                RowHeadersVisible = false
+                RowHeadersVisible = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false
             };
             StyleGrid(grid);
 
@@ -60,55 +178,91 @@ namespace LegoFactory
             Controls.Add(panelHeader);
 
             btnFilter.Click += BtnFilter_Click;
+            tbSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { BtnFilter_Click(s, e); e.SuppressKeyPress = true; } };
             Load += HistoriqueView_Load;
         }
 
-        private void HistoriqueView_Load(object? sender, System.EventArgs e) => RefreshGrid();
+        private void HistoriqueView_Load(object? sender, EventArgs e)
+        {
+            // S'assurer que la table existe
+            try
+            {
+                var db = new DatabaseConnection();
+                using var conn = db.GetConnection();
+                using var cmd = new MySqlCommand(@"
+                    CREATE TABLE IF NOT EXISTS Historique (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        action VARCHAR(100) NOT NULL,
+                        description TEXT,
+                        date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        utilisateur_id INT,
+                        FOREIGN KEY (utilisateur_id) REFERENCES Utilisateur(id) ON DELETE SET NULL
+                    )", conn);
+                cmd.ExecuteNonQuery();
+            }
+            catch { }
+
+            RefreshGrid();
+        }
 
         private void RefreshGrid()
         {
             try
             {
                 using var conn = _db.GetConnection();
-                using var cmd = new MySqlCommand(
-                    "SELECT m.id, m.type AS Type, m.date AS Date, m.quantite AS Quantité, " +
-                    "u.login AS Utilisateur, ls.Reference AS 'Réf Set', ls.nom AS 'Nom Set' " +
-                    "FROM Mouvement m " +
-                    "JOIN Utilisateur u ON u.id = m.utilisateur_id " +
-                    "JOIN LegoSet ls ON ls.id = m.legoset_id " +
-                    "WHERE m.date BETWEEN @from AND @to " +
-                    "ORDER BY m.date DESC, m.id DESC", conn);
+                string query =
+                    "SELECT h.id, h.action AS Action, h.description AS Description, " +
+                    "h.date AS Date, COALESCE(u.login, '—') AS Utilisateur " +
+                    "FROM Historique h " +
+                    "LEFT JOIN Utilisateur u ON u.id = h.utilisateur_id " +
+                    "WHERE h.date BETWEEN @from AND @to";
+
+                string search = tbSearch.Text.Trim();
+                if (!string.IsNullOrEmpty(search))
+                    query += " AND (h.action LIKE @search OR h.description LIKE @search OR u.login LIKE @search)";
+
+                query += " ORDER BY h.date DESC, h.id DESC";
+
+                using var cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@from", dtpFrom.Value.Date);
                 cmd.Parameters.AddWithValue("@to", dtpTo.Value.Date.AddDays(1).AddSeconds(-1));
+                if (!string.IsNullOrEmpty(search))
+                    cmd.Parameters.AddWithValue("@search", $"%{search}%");
+
                 using var reader = cmd.ExecuteReader();
                 var table = new System.Data.DataTable();
                 table.Load(reader);
                 grid.DataSource = table;
                 if (grid.Columns.Contains("id")) grid.Columns["id"].Visible = false;
+
+                // Formater la colonne Date
+                if (grid.Columns.Contains("Date"))
+                    grid.Columns["Date"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm:ss";
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Erreur chargement historique: {ex.Message}");
             }
         }
 
-        private void BtnFilter_Click(object? sender, System.EventArgs e) => RefreshGrid();
+        private void BtnFilter_Click(object? sender, EventArgs e) => RefreshGrid();
 
-        private static Button StyleButton(string text, int x, int y)
+        private static Button CreateButton(string text)
         {
-            return new Button
+            var btn = new Button
             {
                 Text = text,
-                Location = new Point(x, y),
-                Width = 110,
+                Width = 100,
                 Height = 34,
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 BackColor = Color.FromArgb(30, 60, 114),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                FlatAppearance = { BorderSize = 0 },
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Margin = new Padding(0, 2, 0, 0)
             };
+            btn.FlatAppearance.BorderSize = 0;
+            return btn;
         }
 
         private static void StyleGrid(DataGridView g)

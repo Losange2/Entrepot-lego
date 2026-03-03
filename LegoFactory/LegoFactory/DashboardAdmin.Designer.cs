@@ -32,17 +32,32 @@ namespace LegoFactory
             panelHeader = new Panel();
             lblLogo = new Label();
             lblUserInfo = new Label();
+            btnAccueil = new Button();
+            btnGroupStock = new Button();
             btnEntrepot = new Button();
-            btnHistorique = new Button();
+            btnZones = new Button();
             btnEmplacements = new Button();
             btnSets = new Button();
+            btnGroupSuivi = new Button();
+            btnHistorique = new Button();
             btnImportExport = new Button();
-            btnSync = new Button();
-            btnUsersRoles = new Button();
             btnStats = new Button();
+            btnGroupAdmin = new Button();
+            btnUsersRoles = new Button();
             btnLogout = new Button();
             panelContent = new Panel();
             SuspendLayout();
+
+            // Set Name for quick access navigation
+            btnAccueil.Name = "btnAccueil";
+            btnEntrepot.Name = "btnEntrepot";
+            btnZones.Name = "btnZones";
+            btnEmplacements.Name = "btnEmplacements";
+            btnSets.Name = "btnSets";
+            btnHistorique.Name = "btnHistorique";
+            btnImportExport.Name = "btnImportExport";
+            btnUsersRoles.Name = "btnUsersRoles";
+            btnStats.Name = "btnStats";
 
             // --- Sidebar ---
             panelSidebar.BackColor = SidebarMain;
@@ -71,15 +86,23 @@ namespace LegoFactory
             lblUserInfo.Height = 35;
             lblUserInfo.BackColor = SidebarDark;
 
-            // Boutons menu
-            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
-            StyleMenuButton(btnHistorique, "📋   Historique des actions");
-            StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
-            StyleMenuButton(btnSets, "🧱   Gérer les sets");
-            StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
-            StyleMenuButton(btnSync, "🔄   Synchroniser stock");
-            StyleMenuButton(btnUsersRoles, "👥   Utilisateurs et rôles");
-            StyleMenuButton(btnStats, "📊   Statistiques & reporting");
+            // Accueil (standalone)
+            StyleMenuButton(btnAccueil, "🏠   Accueil");
+
+            // Group headers
+            StyleGroupHeader(btnGroupStock, "▾  Gestion stock");
+            StyleGroupHeader(btnGroupSuivi, "▾  Suivi & Outils");
+            StyleGroupHeader(btnGroupAdmin, "▾  Administration");
+
+            // Sub-buttons
+            StyleSubButton(btnEntrepot, "      📦  Entrepôt");
+            StyleSubButton(btnZones, "      🗺️  Zones");
+            StyleSubButton(btnEmplacements, "      📍  Emplacements");
+            StyleSubButton(btnSets, "      🧱  Sets");
+            StyleSubButton(btnHistorique, "      📋  Historique");
+            StyleSubButton(btnImportExport, "      📁  Import / Export");
+            StyleSubButton(btnStats, "      📊  Statistiques");
+            StyleSubButton(btnUsersRoles, "      👥  Utilisateurs");
 
             // Logout
             btnLogout.Text = "🚪   Déconnexion";
@@ -95,26 +118,34 @@ namespace LegoFactory
             btnLogout.TextAlign = ContentAlignment.MiddleCenter;
 
             // Events
+            btnAccueil.Click += btnAccueil_Click;
+            btnGroupStock.Click += btnGroupStock_Click;
             btnEntrepot.Click += btnEntrepot_Click;
-            btnHistorique.Click += btnHistorique_Click;
+            btnZones.Click += btnZones_Click;
             btnEmplacements.Click += btnEmplacements_Click;
             btnSets.Click += btnSets_Click;
+            btnGroupSuivi.Click += btnGroupSuivi_Click;
+            btnHistorique.Click += btnHistorique_Click;
             btnImportExport.Click += btnImportExport_Click;
-            btnSync.Click += btnSync_Click;
-            btnUsersRoles.Click += btnUsersRoles_Click;
             btnStats.Click += btnStats_Click;
+            btnGroupAdmin.Click += btnGroupAdmin_Click;
+            btnUsersRoles.Click += btnUsersRoles_Click;
             btnLogout.Click += btnLogout_Click;
 
-            // Assemblage sidebar
-            var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain };
-            panelMenu.Controls.Add(btnStats);
+            // Assemblage sidebar (ordre inversé car Dock=Top)
+            var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain, AutoScroll = true };
             panelMenu.Controls.Add(btnUsersRoles);
-            panelMenu.Controls.Add(btnSync);
+            panelMenu.Controls.Add(btnGroupAdmin);
+            panelMenu.Controls.Add(btnStats);
             panelMenu.Controls.Add(btnImportExport);
+            panelMenu.Controls.Add(btnHistorique);
+            panelMenu.Controls.Add(btnGroupSuivi);
             panelMenu.Controls.Add(btnSets);
             panelMenu.Controls.Add(btnEmplacements);
-            panelMenu.Controls.Add(btnHistorique);
+            panelMenu.Controls.Add(btnZones);
             panelMenu.Controls.Add(btnEntrepot);
+            panelMenu.Controls.Add(btnGroupStock);
+            panelMenu.Controls.Add(btnAccueil);
 
             panelSidebar.Controls.Add(panelMenu);
             panelSidebar.Controls.Add(lblUserInfo);
@@ -147,14 +178,18 @@ namespace LegoFactory
         private Label lblLogo;
         private Label lblUserInfo;
         private Panel panelContent;
+        private Button btnAccueil;
+        private Button btnGroupStock;
         private Button btnEntrepot;
-        private Button btnHistorique;
+        private Button btnZones;
         private Button btnEmplacements;
         private Button btnSets;
+        private Button btnGroupSuivi;
+        private Button btnHistorique;
         private Button btnImportExport;
-        private Button btnSync;
-        private Button btnUsersRoles;
         private Button btnStats;
+        private Button btnGroupAdmin;
+        private Button btnUsersRoles;
         private Button btnLogout;
     }
 }

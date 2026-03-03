@@ -16,6 +16,7 @@ namespace LegoFactory
         private Button btnHistorique;
         private Button btnStats;
         private Button btnLogout;
+        private Button btnAccueil;
         private Button? _activeButton;
 
         private static readonly Color SidebarDark = Color.FromArgb(20, 40, 80);
@@ -42,8 +43,15 @@ namespace LegoFactory
             btnHistorique = new Button();
             btnStats = new Button();
             btnLogout = new Button();
+            btnAccueil = new Button();
             panelContent = new Panel();
             SuspendLayout();
+
+            // Set Name for quick access navigation
+            btnAccueil.Name = "btnAccueil";
+            btnEntrepot.Name = "btnEntrepot";
+            btnHistorique.Name = "btnHistorique";
+            btnStats.Name = "btnStats";
 
             // --- Sidebar ---
             panelSidebar.BackColor = SidebarMain;
@@ -74,6 +82,8 @@ namespace LegoFactory
             lblUserInfo.BackColor = SidebarDark;
 
             // Boutons menu - Configuration de base seulement
+            btnAccueil.Dock = DockStyle.Top;
+            btnAccueil.Height = 46;
             btnEntrepot.Dock = DockStyle.Top;
             btnEntrepot.Height = 46;
             btnHistorique.Dock = DockStyle.Top;
@@ -95,16 +105,19 @@ namespace LegoFactory
             btnLogout.TextAlign = ContentAlignment.MiddleCenter;
 
             // Events
+            btnAccueil.Click += btnAccueil_Click;
             btnEntrepot.Click += btnEntrepot_Click;
             btnHistorique.Click += btnHistorique_Click;
             btnStats.Click += btnStats_Click;
             btnLogout.Click += btnLogout_Click;
 
             // Assemblage sidebar
-            var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain };
+            var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain, AutoScroll = true };
             panelMenu.Controls.Add(btnStats);
             panelMenu.Controls.Add(btnHistorique);
             panelMenu.Controls.Add(btnEntrepot);
+            panelMenu.Controls.Add(btnAccueil);
+
 
             panelSidebar.Controls.Add(panelMenu);
             panelSidebar.Controls.Add(lblUserInfo);
@@ -168,9 +181,10 @@ namespace LegoFactory
         private void DashboardEmploye_Load(object? sender, EventArgs e)
         {
             // Appliquer les styles aux boutons
-            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt", 0);
-            StyleMenuButton(btnHistorique, "📋   Historique des actions", 48);
-            StyleMenuButton(btnStats, "📊   Statistiques & reporting", 96);
+            StyleMenuButton(btnAccueil, "🏠   Accueil", 0);
+            StyleMenuButton(btnEntrepot, "📦   Entrepôt", 0);
+            StyleMenuButton(btnHistorique, "📋   Historique", 48);
+            StyleMenuButton(btnStats, "📊   Statistiques", 96);
 
             var currentUser = CurrentUser.Instance;
             if (currentUser != null)
@@ -188,6 +202,7 @@ namespace LegoFactory
             panelContent.Controls.Add(view);
         }
 
+        private void btnAccueil_Click(object? sender, EventArgs e) { if (_activeButton != null) { _activeButton.BackColor = SidebarMain; _activeButton.ForeColor = Color.FromArgb(200, 215, 240); _activeButton = null; } ShowView(new DashboardWelcome()); }
         private void btnEntrepot_Click(object? sender, EventArgs e) { SetActiveButton(btnEntrepot); ShowView(new EntrepotView()); }
         private void btnHistorique_Click(object? sender, EventArgs e) { SetActiveButton(btnHistorique); ShowView(new HistoriqueView()); }
         private void btnStats_Click(object? sender, EventArgs e) { SetActiveButton(btnStats); ShowView(new StatsView()); }

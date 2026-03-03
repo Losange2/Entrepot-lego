@@ -14,6 +14,9 @@ namespace LegoFactory
         private DataGridView gridEmplacements;
         private TextBox tbSearch;
         private Button btnSearch;
+        private Button btnAdd;
+        private Button btnEdit;
+        private Button btnDelete;
 
         public SetsView()
         {
@@ -33,12 +36,35 @@ namespace LegoFactory
             };
             panelHeader.Controls.Add(title);
 
-            // Toolbar recherche
-            var panelToolbar = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = BgColor, Padding = new Padding(0, 6, 0, 6) };
-            var lblSearch = new Label { Text = "🔍", Font = new Font("Segoe UI Emoji", 11F), AutoSize = true, Location = new Point(0, 8) };
-            tbSearch = new TextBox { Location = new Point(30, 6), Width = 300, Height = 30, Font = new Font("Segoe UI", 10F), PlaceholderText = "Référence ou nom..." };
-            btnSearch = CreateButton("Rechercher", 345, 3);
-            panelToolbar.Controls.AddRange(new Control[] { lblSearch, tbSearch, btnSearch });
+            // Toolbar
+            var panelToolbar = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                Height = 46,
+                BackColor = BgColor,
+                FlowDirection = FlowDirection.LeftToRight,
+                Padding = new Padding(0, 4, 0, 4)
+            };
+
+            tbSearch = new TextBox
+            {
+                Width = 260,
+                Height = 34,
+                Font = new Font("Segoe UI", 10F),
+                PlaceholderText = "🔍  Référence ou nom...",
+                Margin = new Padding(0, 2, 8, 0)
+            };
+            btnSearch = CreateButton("Rechercher");
+            btnAdd = CreateButton("➕  Ajouter");
+            btnEdit = CreateButton("Modifier");
+            btnDelete = CreateButton("🗑️  Supprimer");
+            btnDelete.BackColor = Color.FromArgb(180, 50, 50);
+
+            panelToolbar.Controls.Add(tbSearch);
+            panelToolbar.Controls.Add(btnSearch);
+            panelToolbar.Controls.Add(btnAdd);
+            panelToolbar.Controls.Add(btnEdit);
+            panelToolbar.Controls.Add(btnDelete);
 
             // SplitContainer pour les 2 grilles
             var split = new SplitContainer
@@ -93,6 +119,9 @@ namespace LegoFactory
             Controls.Add(panelHeader);
 
             btnSearch.Click += BtnSearch_Click;
+            btnAdd.Click += BtnAdd_Click;
+            btnEdit.Click += BtnEdit_Click;
+            btnDelete.Click += BtnDelete_Click;
             tbSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { BtnSearch_Click(s, e); e.SuppressKeyPress = true; } };
             gridSets.SelectionChanged += GridSets_SelectionChanged;
             Load += SetsView_Load;
@@ -105,7 +134,7 @@ namespace LegoFactory
             try
             {
                 using var conn = _db.GetConnection();
-                string query = "SELECT id, Reference, nom, AgeCible, NombresPieces, quantiter FROM LegoSet";
+                string query = "SELECT id, Reference AS Référence, nom AS Nom, AgeCible AS 'Âge cible', NombresPieces AS 'Nb pièces', quantiter AS Quantité FROM LegoSet";
                 if (!string.IsNullOrWhiteSpace(search))
                     query += " WHERE Reference LIKE @search OR nom LIKE @search";
                 query += " ORDER BY Reference";
@@ -116,6 +145,7 @@ namespace LegoFactory
                 var table = new System.Data.DataTable();
                 table.Load(reader);
                 gridSets.DataSource = table;
+                if (gridSets.Columns.Contains("id")) gridSets.Columns["id"].Visible = false;
             }
             catch (System.Exception ex)
             {
@@ -124,6 +154,169 @@ namespace LegoFactory
         }
 
         private void BtnSearch_Click(object? sender, System.EventArgs e) => RefreshSets(tbSearch.Text.Trim());
+
+        private void BtnAdd_Click(object? sender, System.EventArgs e)
+        {
+            using var dlg = new AddSetForm();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using var conn = _db.GetConnection();
+
+                    // Insérer le set
+                    using var cmd = new MySqlCommand(
+                        "INSERT INTO LegoSet (Reference, nom, AgeCible, NombresPieces, quantiter) VALUES (@ref, @nom, @age, @pieces, @qty)", conn);
+                    cmd.Parameters.AddWithValue("@ref", dlg.Reference);
+                    cmd.Parameters.AddWithValue("@nom", dlg.Nom);
+                    cmd.Parameters.AddWithValue("@age", dlg.AgeCible);
+                    cmd.Parameters.AddWithValue("@pieces", dlg.NombresPieces);
+                    cmd.Parameters.AddWithValue("@qty", dlg.Quantite);
+                    cmd.ExecuteNonQuery();
+
+                    // Récupérer l'id du set inséré
+                    long setId;
+                    using (var cmdId = new MySqlCommand("SELECT LAST_INSERT_ID()", conn))
+                        setId = Convert.ToInt64(cmdId.ExecuteScalar());
+
+                    // Associer le set à l'emplacement choisi
+                    using (var cmdStock = new MySqlCommand(
+                        "INSERT INTO stocker (legoset_id, emplacement_id, quantiter) VALUES (@setId, @emplId, @qty2)", conn))
+                    {
+                        cmdStock.Parameters.AddWithValue("@setId", setId);
+                        cmdStock.Parameters.AddWithValue("@emplId", dlg.SelectedEmplacementId);
+                        cmdStock.Parameters.AddWithValue("@qty2", dlg.Quantite);
+                        cmdStock.ExecuteNonQuery();
+                    }
+
+                    HistoriqueHelper.Log("Ajout set", $"Set '{dlg.Reference} — {dlg.Nom}' ajouté (qté: {dlg.Quantite})");
+                    RefreshSets();
+                    MessageBox.Show($"Set '{dlg.Reference}' ajouté avec succès.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (MySqlException ex) when (ex.Number == 1062)
+                {
+                    MessageBox.Show("Cette référence existe déjà.", "Doublon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Erreur ajout: {ex.Message}");
+                }
+            }
+        }
+
+        private void BtnEdit_Click(object? sender, System.EventArgs e)
+        {
+            if (gridSets.CurrentRow == null)
+            {
+                MessageBox.Show("Selectionnez un set a modifier.");
+                return;
+            }
+            var id = gridSets.CurrentRow.Cells["id"].Value;
+            var reference = gridSets.CurrentRow.Cells["Référence"].Value?.ToString() ?? "";
+            var nom = gridSets.CurrentRow.Cells["Nom"].Value?.ToString() ?? "";
+            int age = 0; int.TryParse(gridSets.CurrentRow.Cells["Âge cible"].Value?.ToString(), out age);
+            int pieces = 0; int.TryParse(gridSets.CurrentRow.Cells["Nb pièces"].Value?.ToString(), out pieces);
+            int qty = 0; int.TryParse(gridSets.CurrentRow.Cells["Quantité"].Value?.ToString(), out qty);
+
+            // Récupérer l'emplacement actuel
+            int currentEmplId = 0;
+            try
+            {
+                using var conn2 = _db.GetConnection();
+                using var cmdEmpl = new MySqlCommand("SELECT emplacement_id FROM stocker WHERE legoset_id = @id LIMIT 1", conn2);
+                cmdEmpl.Parameters.AddWithValue("@id", id);
+                var result = cmdEmpl.ExecuteScalar();
+                if (result != null) currentEmplId = System.Convert.ToInt32(result);
+            }
+            catch { }
+
+            using var dlg = new EditSetForm(reference, nom, age, pieces, qty, currentEmplId);
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using var conn = _db.GetConnection();
+
+                    // Mettre à jour le set
+                    using (var cmd = new MySqlCommand(
+                        "UPDATE LegoSet SET Reference = @ref, nom = @nom, AgeCible = @age, NombresPieces = @pieces, quantiter = @qty WHERE id = @id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ref", dlg.Reference);
+                        cmd.Parameters.AddWithValue("@nom", dlg.Nom);
+                        cmd.Parameters.AddWithValue("@age", dlg.AgeCible);
+                        cmd.Parameters.AddWithValue("@pieces", dlg.NombresPieces);
+                        cmd.Parameters.AddWithValue("@qty", dlg.Quantite);
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // Mettre à jour l'emplacement dans stocker
+                    using (var cmdDel = new MySqlCommand("DELETE FROM stocker WHERE legoset_id = @id", conn))
+                    {
+                        cmdDel.Parameters.AddWithValue("@id", id);
+                        cmdDel.ExecuteNonQuery();
+                    }
+                    using (var cmdIns = new MySqlCommand(
+                        "INSERT INTO stocker (legoset_id, emplacement_id, quantiter) VALUES (@setId, @emplId, @qty2)", conn))
+                    {
+                        cmdIns.Parameters.AddWithValue("@setId", id);
+                        cmdIns.Parameters.AddWithValue("@emplId", dlg.SelectedEmplacementId);
+                        cmdIns.Parameters.AddWithValue("@qty2", dlg.Quantite);
+                        cmdIns.ExecuteNonQuery();
+                    }
+
+                    HistoriqueHelper.Log("Modification set", $"Set '{dlg.Reference} \u2014 {dlg.Nom}' modifie");
+                    RefreshSets();
+                    MessageBox.Show($"Set '{dlg.Reference}' modifie avec succes.", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (MySqlException ex) when (ex.Number == 1062)
+                {
+                    MessageBox.Show("Cette reference existe deja.", "Doublon", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Erreur modification: {ex.Message}");
+                }
+            }
+        }
+
+        private void BtnDelete_Click(object? sender, System.EventArgs e)
+        {
+            if (gridSets.CurrentRow == null)
+            {
+                MessageBox.Show("Sélectionnez un set à supprimer.");
+                return;
+            }
+            var id = gridSets.CurrentRow.Cells["id"].Value;
+            var reference = gridSets.CurrentRow.Cells["Référence"].Value?.ToString() ?? "";
+            var nom = gridSets.CurrentRow.Cells["Nom"].Value?.ToString() ?? "";
+
+            if (MessageBox.Show($"Supprimer le set '{reference} — {nom}' ?\n\nCette action est irréversible.",
+                "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                try
+                {
+                    using var conn = _db.GetConnection();
+                    // Supprimer d'abord les liens dans la table stocker
+                    using (var cmdStock = new MySqlCommand("DELETE FROM stocker WHERE legoset_id = @id", conn))
+                    {
+                        cmdStock.Parameters.AddWithValue("@id", id);
+                        cmdStock.ExecuteNonQuery();
+                    }
+                    using var cmd = new MySqlCommand("DELETE FROM LegoSet WHERE id = @id", conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+
+                    HistoriqueHelper.Log("Suppression set", $"Set '{reference} — {nom}' supprimé");
+                    RefreshSets();
+                    MessageBox.Show($"Set '{reference}' supprimé.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show($"Erreur suppression: {ex.Message}");
+                }
+            }
+        }
 
         private void GridSets_SelectionChanged(object? sender, System.EventArgs e)
         {
@@ -155,21 +348,22 @@ namespace LegoFactory
             }
         }
 
-        private static Button CreateButton(string text, int x, int y)
+        private static Button CreateButton(string text)
         {
-            return new Button
+            var btn = new Button
             {
                 Text = text,
-                Location = new Point(x, y),
                 Width = 120,
                 Height = 34,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 BackColor = Color.FromArgb(30, 60, 114),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                FlatAppearance = { BorderSize = 0 },
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Margin = new Padding(0, 2, 8, 0)
             };
+            btn.FlatAppearance.BorderSize = 0;
+            return btn;
         }
 
         private static void StyleGrid(DataGridView g)
