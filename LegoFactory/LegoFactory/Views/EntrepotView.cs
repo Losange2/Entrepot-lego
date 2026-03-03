@@ -6,10 +6,10 @@ namespace LegoFactory
 {
     public class EntrepotView : UserControl
     {
-        private static readonly Color PrimaryColor = Color.FromArgb(41, 98, 255);
+        private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
         private static readonly Color SecondaryColor = Color.FromArgb(99, 102, 241);
         private static readonly Color AccentColor = Color.FromArgb(59, 130, 246);
-        private static readonly Color BgColor = Color.FromArgb(249, 250, 251);
+        private static readonly Color BgColor = Color.FromArgb(245, 247, 251);
         private static readonly Color CardBgColor = Color.White;
         private static readonly Color SuccessColor = Color.FromArgb(16, 185, 129);
         private static readonly Color WarningColor = Color.FromArgb(245, 158, 11);
@@ -27,10 +27,10 @@ namespace LegoFactory
         {
             BackColor = BgColor;
             Dock = DockStyle.Fill;
-            Padding = new Padding(0);
+            Padding = new Padding(24);
             AutoScroll = true;
 
-            // Header avec gradient
+            // Header simple
             var panelHeader = CreateHeaderPanel();
 
             // Panneau de statistiques
@@ -40,11 +40,30 @@ namespace LegoFactory
             var split = new SplitContainer
             {
                 Dock = DockStyle.Fill,
-                SplitterDistance = 380,
+                SplitterDistance = 300,
                 SplitterWidth = 8,
                 BackColor = BgColor,
                 BorderStyle = BorderStyle.None,
-                Orientation = Orientation.Horizontal
+                Orientation = Orientation.Horizontal,
+                IsSplitterFixed = false
+            };
+
+            // Ajuster dynamiquement le splitter pour un ratio équilibré 50/50
+            bool userHasMovedSplitter = false;
+            split.SplitterMoved += (s, ev) => { userHasMovedSplitter = true; /* L'utilisateur a ajusté manuellement */ };
+            SizeChanged += (s, ev) =>
+            {
+                // Ne pas ajuster automatiquement si l'utilisateur a déjà déplacé le splitter
+                if (!userHasMovedSplitter && split.Height > 100)
+                {
+                    // 50% pour chaque partie (minimum 200px pour le TreeView)
+                    int calculatedDistance = (int)(split.Height * 0.50);
+                    calculatedDistance = Math.Max(200, calculatedDistance);
+                    if (Math.Abs(split.SplitterDistance - calculatedDistance) > 20)
+                    {
+                        split.SplitterDistance = calculatedDistance;
+                    }
+                }
             };
 
             // Partie haute - TreeView avec recherche
@@ -52,7 +71,7 @@ namespace LegoFactory
             {
                 Dock = DockStyle.Fill,
                 BackColor = BgColor,
-                Padding = new Padding(15, 0, 15, 10)
+                Padding = new Padding(0, 0, 0, 10)
             };
 
             var leftCard = CreateCardPanel();
@@ -135,7 +154,7 @@ namespace LegoFactory
             {
                 Dock = DockStyle.Fill,
                 BackColor = BgColor,
-                Padding = new Padding(15, 10, 15, 15)
+                Padding = new Padding(0, 10, 0, 0)
             };
 
             var rightCard = CreateCardPanel();
@@ -195,34 +214,19 @@ namespace LegoFactory
             var panel = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 90,
-                BackColor = PrimaryColor,
-                Padding = new Padding(20, 12, 20, 12)
+                Height = 50,
+                BackColor = BgColor
             };
 
             var title = new Label
             {
-                Text = "📦 Consulter l'Entrepôt",
-                Font = new Font("Segoe UI", 20F, FontStyle.Bold),
-                ForeColor = Color.White,
-                Dock = DockStyle.Top,
-                Height = 38,
-                BackColor = Color.Transparent,
-                TextAlign = ContentAlignment.MiddleLeft
+                Text = "📦  Consulter l'Entrepôt",
+                Font = new Font("Segoe UI", 18F, FontStyle.Bold),
+                ForeColor = PrimaryColor,
+                AutoSize = true,
+                Location = new Point(0, 8)
             };
 
-            var subtitle = new Label
-            {
-                Text = "Visualisez et explorez la structure complète de votre entrepôt",
-                Font = new Font("Segoe UI", 9.5F),
-                ForeColor = Color.FromArgb(220, 230, 255),
-                Dock = DockStyle.Top,
-                Height = 28,
-                BackColor = Color.Transparent,
-                TextAlign = ContentAlignment.MiddleLeft
-            };
-
-            panel.Controls.Add(subtitle);
             panel.Controls.Add(title);
             return panel;
         }
@@ -234,7 +238,7 @@ namespace LegoFactory
                 Dock = DockStyle.Top,
                 Height = 125,
                 BackColor = BgColor,
-                Padding = new Padding(15, 15, 15, 15)
+                Padding = new Padding(0, 15, 0, 15)
             };
 
             var statsContainer = new TableLayoutPanel
@@ -524,6 +528,9 @@ namespace LegoFactory
                 var table = new System.Data.DataTable();
                 table.Load(reader);
                 gridContenu.DataSource = table;
+
+                // Ajuster automatiquement le splitter pour les grandes listes
+                AdjustSplitterForContent(table.Rows.Count);
             }
             catch (System.Exception ex)
             {
@@ -577,6 +584,32 @@ namespace LegoFactory
 
                     e.CellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
                 }
+            }
+        }
+
+        private void AdjustSplitterForContent(int rowCount)
+        {
+            // Trouver le SplitContainer parent
+            var split = gridContenu.Parent?.Parent?.Parent?.Parent as SplitContainer;
+            if (split == null) return;
+
+            if (rowCount > 10)
+            {
+                // Beaucoup de contenu : donner 70% au tableau
+                int newDistance = (int)(split.Height * 0.30);
+                split.SplitterDistance = Math.Max(180, newDistance);
+            }
+            else if (rowCount > 5)
+            {
+                // Contenu moyen : donner 60% au tableau
+                int newDistance = (int)(split.Height * 0.40);
+                split.SplitterDistance = Math.Max(200, newDistance);
+            }
+            else
+            {
+                // Peu de contenu : ratio équilibré 50/50
+                int newDistance = (int)(split.Height * 0.50);
+                split.SplitterDistance = Math.Max(200, newDistance);
             }
         }
 
