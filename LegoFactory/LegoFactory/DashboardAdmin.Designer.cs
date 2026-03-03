@@ -29,41 +29,84 @@ namespace LegoFactory
         private void InitializeComponent()
         {
             panelSidebar = new Panel();
-            panelMenu = new Panel();
-            btnStats = new Button();
-            btnUsersRoles = new Button();
-            btnSync = new Button();
-            btnImportExport = new Button();
-            btnSets = new Button();
-            btnEmplacements = new Button();
-            btnHistorique = new Button();
-            btnEntrepot = new Button();
-            lblUserInfo = new Label();
             panelHeader = new Panel();
             lblLogo = new Label();
+            lblUserInfo = new Label();
+            btnEntrepot = new Button();
+            btnHistorique = new Button();
+            btnEmplacements = new Button();
+            btnSets = new Button();
+            btnImportExport = new Button();
+            btnSync = new Button();
+            btnUsersRoles = new Button();
+            btnStats = new Button();
             btnLogout = new Button();
             panelContent = new Panel();
-            panelSidebar.SuspendLayout();
-            panelMenu.SuspendLayout();
-            panelHeader.SuspendLayout();
             SuspendLayout();
-            // 
-            // panelSidebar
-            // 
-            panelSidebar.Controls.Add(panelMenu);
-            panelSidebar.Controls.Add(lblUserInfo);
-            panelSidebar.Controls.Add(panelHeader);
-            panelSidebar.Controls.Add(btnLogout);
+
+            // --- Sidebar ---
+            panelSidebar.BackColor = SidebarMain;
             panelSidebar.Dock = DockStyle.Left;
-            panelSidebar.Location = new Point(0, 0);
-            panelSidebar.Margin = new Padding(3, 4, 3, 4);
-            panelSidebar.Name = "panelSidebar";
-            panelSidebar.Size = new Size(297, 933);
-            panelSidebar.TabIndex = 1;
-            panelSidebar.Paint += panelSidebar_Paint;
-            // 
-            // panelMenu
-            // 
+            panelSidebar.Width = 260;
+
+            // Header
+            panelHeader.BackColor = SidebarDark;
+            panelHeader.Dock = DockStyle.Top;
+            panelHeader.Height = 80;
+
+            lblLogo.Text = "🏭  LegoFactory";
+            lblLogo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            lblLogo.ForeColor = Color.White;
+            lblLogo.AutoSize = false;
+            lblLogo.TextAlign = ContentAlignment.MiddleCenter;
+            lblLogo.Dock = DockStyle.Fill;
+            panelHeader.Controls.Add(lblLogo);
+
+            lblUserInfo.Text = "";
+            lblUserInfo.Font = new Font("Segoe UI", 9F);
+            lblUserInfo.ForeColor = Color.FromArgb(160, 180, 220);
+            lblUserInfo.AutoSize = false;
+            lblUserInfo.TextAlign = ContentAlignment.MiddleCenter;
+            lblUserInfo.Dock = DockStyle.Top;
+            lblUserInfo.Height = 35;
+            lblUserInfo.BackColor = SidebarDark;
+
+            // Boutons menu
+            StyleMenuButton(btnEntrepot, "📦   Consulter l'entrepôt");
+            StyleMenuButton(btnHistorique, "📋   Historique des actions");
+            StyleMenuButton(btnEmplacements, "📍   Gérer les emplacements");
+            StyleMenuButton(btnSets, "🧱   Gérer les sets");
+            StyleMenuButton(btnImportExport, "📁   Importer / Exporter");
+            StyleMenuButton(btnSync, "🔄   Synchroniser stock");
+            StyleMenuButton(btnUsersRoles, "👥   Utilisateurs et rôles");
+            StyleMenuButton(btnStats, "📊   Statistiques & reporting");
+
+            // Logout
+            btnLogout.Text = "🚪   Déconnexion";
+            btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnLogout.ForeColor = Color.White;
+            btnLogout.BackColor = Color.FromArgb(180, 50, 50);
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatAppearance.MouseOverBackColor = Color.FromArgb(210, 60, 60);
+            btnLogout.Cursor = Cursors.Hand;
+            btnLogout.Dock = DockStyle.Bottom;
+            btnLogout.Height = 48;
+            btnLogout.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Events
+            btnEntrepot.Click += btnEntrepot_Click;
+            btnHistorique.Click += btnHistorique_Click;
+            btnEmplacements.Click += btnEmplacements_Click;
+            btnSets.Click += btnSets_Click;
+            btnImportExport.Click += btnImportExport_Click;
+            btnSync.Click += btnSync_Click;
+            btnUsersRoles.Click += btnUsersRoles_Click;
+            btnStats.Click += btnStats_Click;
+            btnLogout.Click += btnLogout_Click;
+
+            // Assemblage sidebar
+            var panelMenu = new Panel { Dock = DockStyle.Fill, BackColor = SidebarMain };
             panelMenu.Controls.Add(btnStats);
             panelMenu.Controls.Add(btnUsersRoles);
             panelMenu.Controls.Add(btnSync);
@@ -72,162 +115,28 @@ namespace LegoFactory
             panelMenu.Controls.Add(btnEmplacements);
             panelMenu.Controls.Add(btnHistorique);
             panelMenu.Controls.Add(btnEntrepot);
-            panelMenu.Location = new Point(0, 0);
-            panelMenu.Margin = new Padding(3, 4, 3, 4);
-            panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(229, 133);
-            panelMenu.TabIndex = 0;
-            panelMenu.Paint += panelMenu_Paint;
-            // 
-            // btnStats
-            // 
-            btnStats.Location = new Point(0, 0);
-            btnStats.Margin = new Padding(3, 4, 3, 4);
-            btnStats.Name = "btnStats";
-            btnStats.Size = new Size(86, 31);
-            btnStats.TabIndex = 0;
-            btnStats.Click += btnStats_Click;
-            // 
-            // btnUsersRoles
-            // 
-            btnUsersRoles.Location = new Point(0, 0);
-            btnUsersRoles.Margin = new Padding(3, 4, 3, 4);
-            btnUsersRoles.Name = "btnUsersRoles";
-            btnUsersRoles.Size = new Size(86, 31);
-            btnUsersRoles.TabIndex = 1;
-            btnUsersRoles.Click += btnUsersRoles_Click;
-            // 
-            // btnSync
-            // 
-            btnSync.Location = new Point(0, 0);
-            btnSync.Margin = new Padding(3, 4, 3, 4);
-            btnSync.Name = "btnSync";
-            btnSync.Size = new Size(86, 31);
-            btnSync.TabIndex = 2;
-            btnSync.Click += btnSync_Click;
-            // 
-            // btnImportExport
-            // 
-            btnImportExport.Location = new Point(0, 0);
-            btnImportExport.Margin = new Padding(3, 4, 3, 4);
-            btnImportExport.Name = "btnImportExport";
-            btnImportExport.Size = new Size(86, 31);
-            btnImportExport.TabIndex = 3;
-            btnImportExport.Click += btnImportExport_Click;
-            // 
-            // btnSets
-            // 
-            btnSets.Location = new Point(0, 0);
-            btnSets.Margin = new Padding(3, 4, 3, 4);
-            btnSets.Name = "btnSets";
-            btnSets.Size = new Size(86, 31);
-            btnSets.TabIndex = 4;
-            btnSets.Click += btnSets_Click;
-            // 
-            // btnEmplacements
-            // 
-            btnEmplacements.Location = new Point(0, 0);
-            btnEmplacements.Margin = new Padding(3, 4, 3, 4);
-            btnEmplacements.Name = "btnEmplacements";
-            btnEmplacements.Size = new Size(86, 31);
-            btnEmplacements.TabIndex = 5;
-            btnEmplacements.Click += btnEmplacements_Click;
-            // 
-            // btnHistorique
-            // 
-            btnHistorique.Location = new Point(0, 0);
-            btnHistorique.Margin = new Padding(3, 4, 3, 4);
-            btnHistorique.Name = "btnHistorique";
-            btnHistorique.Size = new Size(86, 31);
-            btnHistorique.TabIndex = 6;
-            btnHistorique.Click += btnHistorique_Click;
-            // 
-            // btnEntrepot
-            // 
-            btnEntrepot.Location = new Point(0, 0);
-            btnEntrepot.Margin = new Padding(3, 4, 3, 4);
-            btnEntrepot.Name = "btnEntrepot";
-            btnEntrepot.Size = new Size(86, 31);
-            btnEntrepot.TabIndex = 7;
-            btnEntrepot.Click += btnEntrepot_Click;
-            // 
-            // lblUserInfo
-            // 
-            lblUserInfo.Dock = DockStyle.Top;
-            lblUserInfo.Font = new Font("Segoe UI", 9F);
-            lblUserInfo.ForeColor = Color.FromArgb(160, 180, 220);
-            lblUserInfo.Location = new Point(0, 107);
-            lblUserInfo.Name = "lblUserInfo";
-            lblUserInfo.Size = new Size(297, 47);
-            lblUserInfo.TabIndex = 1;
-            lblUserInfo.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // panelHeader
-            // 
-            panelHeader.Controls.Add(lblLogo);
-            panelHeader.Dock = DockStyle.Top;
-            panelHeader.Location = new Point(0, 0);
-            panelHeader.Margin = new Padding(3, 4, 3, 4);
-            panelHeader.Name = "panelHeader";
-            panelHeader.Size = new Size(297, 107);
-            panelHeader.TabIndex = 2;
-            // 
-            // lblLogo
-            // 
-            lblLogo.Dock = DockStyle.Fill;
-            lblLogo.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblLogo.ForeColor = Color.White;
-            lblLogo.Location = new Point(0, 0);
-            lblLogo.Name = "lblLogo";
-            lblLogo.Size = new Size(297, 107);
-            lblLogo.TabIndex = 0;
-            lblLogo.Text = "🏭  LegoFactory";
-            lblLogo.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // btnLogout
-            // 
-            btnLogout.BackColor = Color.FromArgb(180, 50, 50);
-            btnLogout.Cursor = Cursors.Hand;
-            btnLogout.Dock = DockStyle.Bottom;
-            btnLogout.FlatAppearance.BorderSize = 0;
-            btnLogout.FlatAppearance.MouseOverBackColor = Color.FromArgb(210, 60, 60);
-            btnLogout.FlatStyle = FlatStyle.Flat;
-            btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(0, 869);
-            btnLogout.Margin = new Padding(3, 4, 3, 4);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(297, 64);
-            btnLogout.TabIndex = 3;
-            btnLogout.Text = "🚪   Déconnexion";
-            btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click;
-            // 
-            // panelContent
-            // 
+
+            panelSidebar.Controls.Add(panelMenu);
+            panelSidebar.Controls.Add(lblUserInfo);
+            panelSidebar.Controls.Add(panelHeader);
+            panelSidebar.Controls.Add(btnLogout);
+
+            // --- Content ---
             panelContent.Dock = DockStyle.Fill;
-            panelContent.Location = new Point(297, 0);
-            panelContent.Margin = new Padding(3, 4, 3, 4);
-            panelContent.Name = "panelContent";
-            panelContent.Size = new Size(960, 933);
-            panelContent.TabIndex = 0;
-            // 
-            // DashboardAdmin
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            panelContent.BackColor = ContentBg;
+
+            // --- Form ---
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1257, 933);
+            ClientSize = new Size(1100, 700);
+            MinimumSize = new Size(800, 500);
             Controls.Add(panelContent);
             Controls.Add(panelSidebar);
-            Margin = new Padding(3, 4, 3, 4);
-            MinimumSize = new Size(912, 651);
             Name = "DashboardAdmin";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "LegoFactory - Admin";
+            StartPosition = FormStartPosition.CenterScreen;
+            BackColor = ContentBg;
             Load += DashboardAdmin_Load;
-            panelSidebar.ResumeLayout(false);
-            panelMenu.ResumeLayout(false);
-            panelHeader.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -247,6 +156,5 @@ namespace LegoFactory
         private Button btnUsersRoles;
         private Button btnStats;
         private Button btnLogout;
-        private Panel panelMenu;
     }
 }

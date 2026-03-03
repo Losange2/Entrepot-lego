@@ -56,31 +56,13 @@ namespace LegoFactory
 
             if (currentUser == null)
             {
-                MessageBox.Show("Erreur: Utilisateur non identifié", "Erreur");
+                MessageBox.Show("Erreur: Utilisateur non identifi�", "Erreur");
                 this.Close();
                 return;
             }
 
             Text = $"LegoFactory — {currentUser.Login} ({currentUser.Role})";
             lblUserInfo.Text = $"👤 {currentUser.Login} — {currentUser.Role}";
-
-            // Appliquer les styles aux boutons du menu
-            StyleMenuButton(btnEntrepot, "📦  Entrepôt");
-            StyleMenuButton(btnHistorique, "📜  Historique");
-            StyleMenuButton(btnEmplacements, "📍  Emplacements");
-            StyleMenuButton(btnSets, "🧱  Sets Lego");
-            StyleMenuButton(btnImportExport, "📁  Import/Export");
-            StyleMenuButton(btnSync, "🔄  Synchronisation");
-            StyleMenuButton(btnUsersRoles, "👥  Utilisateurs");
-            StyleMenuButton(btnStats, "📊  Statistiques");
-
-            // Configurer les couleurs du panel
-            panelSidebar.BackColor = SidebarMain;
-            panelHeader.BackColor = SidebarDark;
-            panelMenu.BackColor = SidebarMain;
-            panelMenu.Dock = DockStyle.Fill;
-            panelContent.BackColor = ContentBg;
-
             ShowView(new DashboardWelcome());
         }
 
@@ -105,16 +87,6 @@ namespace LegoFactory
             CurrentUser.Instance = null;
             new LoginForm().Show();
             this.Close();
-        }
-
-        private void panelMenu_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panelSidebar_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

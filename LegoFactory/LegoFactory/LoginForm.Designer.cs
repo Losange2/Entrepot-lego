@@ -63,15 +63,11 @@ namespace LegoFactory
             panelLeft.Controls.Add(pblogo);
 
             // pblogo
-            string logoPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "img", "logo.png");
-            logoPath = Path.GetFullPath(logoPath);
             pblogo.SizeMode = PictureBoxSizeMode.Zoom;
             pblogo.Size = new Size(180, 180);
             pblogo.Location = new Point(120, 80);
             pblogo.BackColor = Color.Transparent;
             pblogo.TabStop = false;
-            if (File.Exists(logoPath))
-                pblogo.Image = Image.FromFile(logoPath);
 
             // lblWelcome
             lblWelcome.Text = "Bienvenue";
@@ -156,7 +152,7 @@ namespace LegoFactory
             tbmdp.Size = new Size(285, 28);
             tbmdp.BorderStyle = BorderStyle.None;
             tbmdp.BackColor = Color.White;
-            tbmdp.PasswordChar = '●';
+            tbmdp.PasswordChar = '*';
             tbmdp.PlaceholderText = "Mot de passe";
             tbmdp.TabIndex = 2;
 

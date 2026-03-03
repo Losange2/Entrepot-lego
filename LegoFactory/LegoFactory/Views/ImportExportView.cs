@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 
 namespace LegoFactory
 {
-    public partial class ImportExportView : UserControl
+    public class ImportExportView : UserControl
     {
         private static readonly Color PrimaryColor = Color.FromArgb(30, 60, 114);
         private static readonly Color BgColor = Color.FromArgb(245, 247, 251);
@@ -14,8 +14,6 @@ namespace LegoFactory
 
         public ImportExportView()
         {
-            InitializeComponent();
-
             BackColor = BgColor;
             Dock = DockStyle.Fill;
             Padding = new Padding(24);
@@ -52,14 +50,14 @@ namespace LegoFactory
                 "Export CSV : tous les sets avec emplacements et quantités",
                 "Exporter CSV", BtnExport_Click);
 
-            // Card Export All Sets
-            var cardExportAllSets = CreateCard("📋  Fichier vide",
-                "Le fichier vide",
-                "Récupéré un fichier vide", BtnExportAllSets_Click);
+            // Card Export Template
+            var cardTemplate = CreateCard("📋  Exporter un modèle CSV vide",
+                "Fichier template avec les en-têtes pour faciliter l'import",
+                "Télécharger Modèle", BtnExportTemplate_Click);
 
             panelCards.Controls.Add(cardImport);
             panelCards.Controls.Add(cardExport);
-            panelCards.Controls.Add(cardExportAllSets);
+            panelCards.Controls.Add(cardTemplate);
 
             Controls.Add(panelCards);
             Controls.Add(panelHeader);
@@ -137,20 +135,11 @@ namespace LegoFactory
 
                     try
                     {
-                        var reference = parts[0].Trim();
-                        var nom = parts[1].Trim();
-
-                        if (string.IsNullOrEmpty(reference) || string.IsNullOrEmpty(nom))
-                        {
-                            errors++;
-                            continue;
-                        }
-
                         using var cmd = new MySqlCommand(
                             "INSERT INTO LegoSet (Reference, nom, AgeCible, NombresPieces, quantiter) VALUES (@ref, @nom, @age, @pieces, @qte) " +
                             "ON DUPLICATE KEY UPDATE nom=@nom, AgeCible=@age, NombresPieces=@pieces, quantiter=quantiter+@qte", conn);
-                        cmd.Parameters.AddWithValue("@ref", reference);
-                        cmd.Parameters.AddWithValue("@nom", nom);
+                        cmd.Parameters.AddWithValue("@ref", parts[0].Trim());
+                        cmd.Parameters.AddWithValue("@nom", parts[1].Trim());
                         cmd.Parameters.AddWithValue("@age", int.Parse(parts[2].Trim()));
                         cmd.Parameters.AddWithValue("@pieces", int.Parse(parts[3].Trim()));
                         cmd.Parameters.AddWithValue("@qte", int.Parse(parts[4].Trim()));
@@ -191,13 +180,7 @@ namespace LegoFactory
                 int count = 0;
                 while (reader.Read())
                 {
-                    var reference = reader["Reference"]?.ToString() ?? "";
-                    var nom = reader["nom"]?.ToString() ?? "";
-                    var emplacement = reader["emplacement"]?.ToString() ?? "";
-                    var quantite = reader["quantiter"]?.ToString() ?? "0";
-                    var zone = reader["zone"]?.ToString() ?? "";
-
-                    writer.WriteLine($"{reference};{nom};{emplacement};{quantite};{zone}");
+                    writer.WriteLine($"{reader["Reference"]};{reader["nom"]};{reader["emplacement"]};{reader["quantiter"]};{reader["zone"]}");
                     count++;
                 }
 
@@ -209,29 +192,21 @@ namespace LegoFactory
             }
         }
 
-        private void BtnExportAllSets_Click(object? sender, System.EventArgs e)
+        private void BtnExportTemplate_Click(object? sender, System.EventArgs e)
         {
-            using var dlg = new SaveFileDialog 
-            { 
-                Filter = "CSV files (*.csv)|*.csv", 
-                Title = "Fichier Vide", 
-                FileName = $"export_all_sets_{System.DateTime.Now:yyyyMMdd}.csv" 
-            };
+            using var dlg = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv", Title = "Télécharger modèle CSV", FileName = "modele_import_sets.csv" };
             if (dlg.ShowDialog() != DialogResult.OK) return;
 
             try
             {
-                using var conn = _db.GetConnection();
-                using var cmd = new MySqlCommand();
-
                 using var writer = new StreamWriter(dlg.FileName);
-                writer.WriteLine("Reference;Nom;AgeCible;NombresPieces;Quantite");
+                writer.WriteLine("Reference;nom;AgeCible;NombresPieces;quantiter");
 
-                MessageBox.Show($"Export terminé :  fichier vide");
+                MessageBox.Show("Modèle CSV créé avec succès !\n\nVous pouvez maintenant remplir ce fichier et l'importer.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Erreur export : {ex.Message}");
+                MessageBox.Show($"Erreur création modèle : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

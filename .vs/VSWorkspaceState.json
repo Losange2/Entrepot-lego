@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\LegoFactory",
-    "\\LegoFactory\\LegoFactory",
-    "\\LegoFactory\\LegoFactory\\Views"
+    "\\LegoFactory\\LegoFactory"
   ],
-  "SelectedNode": "\\LegoFactory\\LegoFactory",
+  "SelectedNode": "\\LegoFactory\\LegoFactory\\LoginForm.cs",
   "PreviewInSolutionExplorer": false
 }
