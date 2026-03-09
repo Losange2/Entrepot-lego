@@ -148,7 +148,7 @@ namespace LegoFactory
                         "INSERT INTO Utilisateur (nom, login, motDePasse, role) VALUES (@nom, @login, @mdp, @role)", conn);
                     cmd.Parameters.AddWithValue("@nom", dlg.Nom);
                     cmd.Parameters.AddWithValue("@login", dlg.Login);
-                    cmd.Parameters.AddWithValue("@mdp", dlg.Password);
+                    cmd.Parameters.AddWithValue("@mdp", Security.PasswordHasher.HashPassword(dlg.Password));
                     cmd.Parameters.AddWithValue("@role", dlg.SelectedRole);
                     cmd.ExecuteNonQuery();
                     HistoriqueHelper.Log("Ajout utilisateur", $"Utilisateur '{dlg.Login}' créé (rôle: {dlg.SelectedRole})");
@@ -199,7 +199,7 @@ namespace LegoFactory
                     cmd.Parameters.AddWithValue("@id", id);
                     if (!string.IsNullOrWhiteSpace(dlg.Password))
                     {
-                        cmd.Parameters.AddWithValue("@mdp", dlg.Password);
+                        cmd.Parameters.AddWithValue("@mdp", Security.PasswordHasher.HashPassword(dlg.Password));
                     }
                     cmd.ExecuteNonQuery();
                     HistoriqueHelper.Log("Modification utilisateur", $"Utilisateur '{dlg.UserLogin}' modifié (rôle: {dlg.SelectedRole})");

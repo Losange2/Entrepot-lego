@@ -44,6 +44,7 @@ namespace LegoFactory
             btnStats = new Button();
             btnGroupAdmin = new Button();
             btnUsersRoles = new Button();
+            btnMigratePasswords = new Button();
             btnLogout = new Button();
             panelContent = new Panel();
             SuspendLayout();
@@ -130,6 +131,7 @@ namespace LegoFactory
             btnStats.Click += btnStats_Click;
             btnGroupAdmin.Click += btnGroupAdmin_Click;
             btnUsersRoles.Click += btnUsersRoles_Click;
+            btnMigratePasswords.Click += btnMigratePasswords_Click;
             btnLogout.Click += btnLogout_Click;
 
             // Assemblage sidebar (ordre inversé car Dock=Top)
@@ -190,6 +192,7 @@ namespace LegoFactory
         private Button btnStats;
         private Button btnGroupAdmin;
         private Button btnUsersRoles;
+        private Button btnMigratePasswords;
         private Button btnLogout;
     }
 }

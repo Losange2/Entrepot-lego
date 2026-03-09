@@ -141,24 +141,69 @@ namespace LegoFactory
         {
             using MySqlConnection connection = _database.GetConnection();
             using MySqlCommand command = new MySqlCommand(
-                "SELECT id, role FROM Utilisateur WHERE login = @username AND motDePasse = @password LIMIT 1",
+                "SELECT id, role, motDePasse FROM Utilisateur WHERE login = @username LIMIT 1",
                 connection);
 
             command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
                 int userId = (int)reader["id"];
                 string roleStr = reader["role"]?.ToString() ?? "Employe";
+                string storedPassword = reader["motDePasse"]?.ToString() ?? "";
 
-                UserRole role = ParseRole(roleStr);
-                CurrentUser.Instance = new CurrentUser { Id = userId, Login = username, Role = role };
+                bool isAuthenticated = false;
+                bool needsMigration = false;
 
-                return true;
+                // Vérifier si c'est un hash BCrypt (commence par $2a$, $2b$, ou $2y$)
+                if (storedPassword.StartsWith("$2a$") || storedPassword.StartsWith("$2b$") || storedPassword.StartsWith("$2y$"))
+                {
+                    // Mot de passe déjà haché - vérifier avec BCrypt
+                    isAuthenticated = Security.PasswordHasher.VerifyPassword(password, storedPassword);
+                }
+                else
+                {
+                    // Ancien format en clair - comparaison directe
+                    isAuthenticated = storedPassword == password;
+                    needsMigration = isAuthenticated; // Si authentifié, on doit migrer
+                }
+
+                if (isAuthenticated)
+                {
+                    UserRole role = ParseRole(roleStr);
+                    CurrentUser.Instance = new CurrentUser { Id = userId, Login = username, Role = role };
+
+                    // Migration automatique si nécessaire
+                    if (needsMigration)
+                    {
+                        reader.Close();
+                        MigrateUserPassword(userId, password);
+                    }
+
+                    return true;
+                }
             }
             return false;
+        }
+
+        // Migre automatiquement un mot de passe en clair vers BCrypt
+        private void MigrateUserPassword(int userId, string plainPassword)
+        {
+            try
+            {
+                using var conn = _database.GetConnection();
+                string hashedPassword = Security.PasswordHasher.HashPassword(plainPassword);
+                using var cmd = new MySqlCommand(
+                    "UPDATE Utilisateur SET motDePasse = @hash WHERE id = @id", conn);
+                cmd.Parameters.AddWithValue("@hash", hashedPassword);
+                cmd.Parameters.AddWithValue("@id", userId);
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                // Échec silencieux - l'utilisateur peut se connecter quand même
+            }
         }
 
         // Convertit une chaîne de rôle en enum UserRole

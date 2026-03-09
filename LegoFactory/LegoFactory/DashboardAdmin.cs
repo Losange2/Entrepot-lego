@@ -125,6 +125,7 @@ namespace LegoFactory
             _adminExpanded = !_adminExpanded;
             btnGroupAdmin.Text = (_adminExpanded ? "▾" : "▸") + "  Administration";
             btnUsersRoles.Visible = _adminExpanded;
+            btnMigratePasswords.Visible = _adminExpanded;
         }
 
         private void DashboardAdmin_Load(object sender, EventArgs e)
@@ -168,6 +169,11 @@ namespace LegoFactory
         private void btnImportExport_Click(object? sender, EventArgs e) { SetActiveButton(btnImportExport); ShowView(new ImportExportView()); }
         private void btnUsersRoles_Click(object? sender, EventArgs e) { SetActiveButton(btnUsersRoles); ShowView(new UsersRolesView()); }
         private void btnStats_Click(object? sender, EventArgs e) { SetActiveButton(btnStats); ShowView(new StatsView()); }
+
+        private void btnMigratePasswords_Click(object? sender, EventArgs e)
+        {
+            Utils.PasswordMigrationTool.MigrateAllPasswords();
+        }
 
         private void btnLogout_Click(object? sender, EventArgs e)
         {
