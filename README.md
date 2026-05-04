@@ -301,7 +301,7 @@ La base de données MySQL comporte **7 tables** :
 
 ![Schéma UML LegoFactory](shemaUML%20LegoFactory.png)
 
-## � Cas d'utilisation (Use Case)
+## Cas d'utilisation (Use Case)
 
 Le diagramme de cas d'utilisation ci-dessous décrit les principaux rôles et actions de l'application.
 
@@ -365,7 +365,7 @@ graph LR
 
 > Si votre lecteur Markdown supporte Mermaid, ce bloc génèrera automatiquement le diagramme. Sinon, utilisez mermaid.live et copiez-y le même code.
 
-## �🌐 Technologies utilisées
+## 🌐 Technologies utilisées
 
 ### Application
 - **C#** - Langage de programmation principal
