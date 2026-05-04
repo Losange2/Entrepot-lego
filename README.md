@@ -140,7 +140,13 @@ Connectez-vous à MySQL (via phpMyAdmin ou en ligne de commande) et exécutez :
 CREATE DATABASE IF NOT EXISTS LegoFactory;
 ```
 
-Puis importez le schéma de la base de données (tables Utilisateur, Zone, Emplacement, LegoSet, stocker, Historique).
+Puis importez le schéma de la base de données et les données de test avec le fichier `seed.sql` :
+
+```bash
+mysql -u root -p LegoFactory < seed.sql
+```
+
+Le fichier `seed.sql` contient les tables principales et des exemples de données pour démarrer rapidement.
 
 ### Étape 4 : Installer les dépendances et compiler
 
@@ -206,6 +212,7 @@ Rôle : Employe
 ```
 Entrepot-lego/
 ├── README.md
+├── seed.sql
 ├── shemaUML LegoFactory.png
 ├── LegoFactory/
 │   ├── .env                     # Variables d'environnement (non versionné)
