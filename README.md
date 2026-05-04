@@ -294,7 +294,71 @@ La base de données MySQL comporte **7 tables** :
 
 ![Schéma UML LegoFactory](shemaUML%20LegoFactory.png)
 
-## 🌐 Technologies utilisées
+## � Cas d'utilisation (Use Case)
+
+Le diagramme de cas d'utilisation ci-dessous décrit les principaux rôles et actions de l'application.
+
+```mermaid
+graph LR
+    Employe["Employé"]
+    Responsable["Responsable"]
+    Admin["Administrateur"]
+    
+    UC1["Se connecter"]
+    UC2["Consulter l'entrepôt"]
+    UC3["Rechercher zone / emplacement"]
+    UC4["Voir contenu d'un emplacement"]
+    UC5["Voir l'historique"]
+    UC6["Voir les statistiques"]
+    UC7["Gérer les zones"]
+    UC8["Gérer les emplacements"]
+    UC9["Gérer les sets Lego"]
+    UC10["Importer CSV"]
+    UC11["Exporter CSV"]
+    UC12["Gérer les utilisateurs"]
+    UC13["Migrer les mots de passe"]
+    UC14["Gérer les rôles"]
+    
+    Employe --> UC1
+    Employe --> UC2
+    Employe --> UC3
+    Employe --> UC4
+    Employe --> UC5
+    Employe --> UC6
+    
+    Responsable --> UC1
+    Responsable --> UC2
+    Responsable --> UC3
+    Responsable --> UC4
+    Responsable --> UC5
+    Responsable --> UC6
+    Responsable --> UC7
+    Responsable --> UC8
+    Responsable --> UC9
+    Responsable --> UC10
+    Responsable --> UC11
+    
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+    Admin --> UC11
+    Admin --> UC12
+    Admin --> UC13
+    Admin --> UC14
+    
+    UC10 -.-> UC11
+```
+
+> Si votre lecteur Markdown supporte Mermaid, ce bloc génèrera automatiquement le diagramme. Sinon, utilisez mermaid.live et copiez-y le même code.
+
+## �🌐 Technologies utilisées
 
 ### Application
 - **C#** - Langage de programmation principal
